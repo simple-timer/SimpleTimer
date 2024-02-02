@@ -19,6 +19,6 @@ enum class Lang(val discordLocal: DiscordLocale, private val locale: String, val
      * @return 言語のファイルの相対パス
      */
     fun getFilePath(): String {
-        return "${if (locale == "") "" else "${locale}${File.separator}"}Lang.yml"
+        return "${File.separator}${if (locale == "") "" else "${locale}${File.separator}"}Lang.yml"
     }
 }

@@ -5,7 +5,6 @@ import dev.simpletimer.command.SlashCommandManager
 import dev.simpletimer.data.DataContainer
 import dev.simpletimer.dice.bcdice.BCDiceManager
 import dev.simpletimer.listener.*
-import dev.simpletimer.web_api.DataUploader
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
@@ -163,14 +162,11 @@ class SimpleTimer {
         //データのクラス
         dataContainer = DataContainer()
 
-        //データアップローダーを開始
-        DataUploader()
-
         //Tokenを取得
-        val token = dataContainer.config.token
+        val token = dataContainer.config.token.value
 
         //トークンがないときに終了する
-        if (token.equals("TOKEN IS HERE", ignoreCase = true)) {
+        if (token == "") {
             //コンソールに出力
             println("SETUP: Write the token in the \"token\" field of config.yml")
             return
@@ -200,9 +196,9 @@ class SimpleTimer {
         shardBuilder.setActivity(Activity.customStatus("/helpでヘルプ表示"))
 
         //shardを作る
-        for (i in 0 until dataContainer.config.shardsCount) {
+        for (i in 0 until dataContainer.config.shardsCount.value.toInt()) {
             //shardを作る
-            val shard = shardBuilder.useSharding(i, dataContainer.config.shardsCount).build()
+            val shard = shardBuilder.useSharding(i, dataContainer.config.shardsCount.value.toInt()).build()
 
             //追加
             shards.add(shard)
@@ -229,6 +225,8 @@ class SimpleTimer {
                 }
                 println("Botを終了します...")
                 break
+            } else if (input == "convert") {
+                dataContainer.convertLegacyDataToDatabase()
             }
         }
     }
@@ -267,7 +265,7 @@ class SimpleTimer {
             setDescription(version)
             addField("必要な権限が付与されていません", "Botの動作に必要な権限が付与されていません", false)
             addField("該当のチャンネル", "<#${channel.idLong}>", false)
-            addField("詳しくはこちらを参照してください", "https://simpletimer.fanbox.cc/posts/3128708", false)
+            addField("詳しくはこちらを参照してください", "https://manual.simpletimer.dev/permissions.html", false)
         }.build()
     }
 }
