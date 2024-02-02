@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.9.22"
-    kotlin("plugin.serialization") version "1.9.21"
+    kotlin("plugin.serialization") version "1.9.22"
 
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
@@ -13,7 +13,7 @@ repositories {
     maven(url = "https://m2.dv8tion.net/releases")
 }
 
-val exposedVersion = "0.44.1"
+val exposedVersion = "0.47.0"
 
 dependencies {
     implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-core", "1.7.3")
@@ -43,7 +43,7 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-java-time:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-json:$exposedVersion")
-    implementation("org.postgresql:postgresql:42.6.0")
+    implementation("org.postgresql:postgresql:42.7.1")
 }
 
 java {
