@@ -13,7 +13,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter
 /**
  * スラッシュコマンドに対応をするクラス
  */
-class SlashCommandInteraction : ListenerAdapter() {
+object SlashCommandInteraction : ListenerAdapter() {
     /**
      * スラッシュコマンドを実行した時に呼び出される
      *

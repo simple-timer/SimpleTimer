@@ -15,7 +15,7 @@ import java.util.*
  * リアクションの操作を行うクラス
  *
  */
-class GenericMessageReaction : ListenerAdapter() {
+object GenericMessageReaction : ListenerAdapter() {
     //各チャンネルのクールタイム用のセット
     private val coolTime = TreeSet<Long>()
 

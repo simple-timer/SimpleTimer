@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter
  * 選択メニューに対応をするクラス
  *
  */
-class SelectMenuInteraction : ListenerAdapter() {
+object SelectMenuInteraction : ListenerAdapter() {
 
     /**
      * 選択メニューを選択した時に実行される

@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter
  * Modal対応をするクラス
  *
  */
-class ModalInteraction : ListenerAdapter() {
+object ModalInteraction : ListenerAdapter() {
 
     /**
      * 選択メニューを選択した時に実行される

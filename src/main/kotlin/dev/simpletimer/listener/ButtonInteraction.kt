@@ -12,7 +12,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter
  *
  * @constructor Create empty Button click
  */
-class ButtonInteraction : ListenerAdapter() {
+object ButtonInteraction : ListenerAdapter() {
     private val buttonManager = ButtonManager()
 
     /**

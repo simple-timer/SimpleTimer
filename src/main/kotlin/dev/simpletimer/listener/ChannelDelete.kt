@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter
  * チャンネルの削除に対応をするクラス
  *
  */
-class ChannelDelete : ListenerAdapter() {
+object ChannelDelete : ListenerAdapter() {
     /**
      * チャンネルを削除したときに呼び出される
      *

@@ -21,7 +21,7 @@ object HelpCommand : SlashCommandManager.SlashCommand(CommandInfoPath.HELP) {
             //タイトル設定
             setTitle("SimpleTimer")
             //バージョンを説明文に入れる
-            setDescription(SimpleTimer.instance.version)
+            setDescription(SimpleTimer.VERSION)
             //画像
             setThumbnail("https://i.ibb.co/YZ8PfJR/youf.png")
             //フィールド追加

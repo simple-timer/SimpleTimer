@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter
  * VCの更新に対して応答する
  *
  */
-class GuildVoiceUpdate : ListenerAdapter() {
+object GuildVoiceUpdate : ListenerAdapter() {
     /**
      * VCが更新されたときに呼び出される
      *

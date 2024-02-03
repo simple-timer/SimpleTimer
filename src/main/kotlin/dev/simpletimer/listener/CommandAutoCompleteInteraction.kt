@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter
  * コマンドの自動補完対応をするクラス
  *
  */
-class CommandAutoCompleteInteraction : ListenerAdapter() {
+object CommandAutoCompleteInteraction : ListenerAdapter() {
     /**
      * コマンドのオプション入力時に呼び出される
      *

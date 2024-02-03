@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter
  * メッセージ削除時に対応をするクラス
  *
  */
-class MessageDelete : ListenerAdapter() {
+object MessageDelete : ListenerAdapter() {
 
     /**
      * メッセージが削除された時に呼び出される
