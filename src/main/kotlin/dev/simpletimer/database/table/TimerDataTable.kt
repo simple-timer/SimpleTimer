@@ -19,13 +19,13 @@ object TimerDataTable : Table("timer_data") {
     val channel =
         jsonb<@Serializable(with = GuildMessageChannelSerializer::class) GuildMessageChannel>("channel", Json.Default)
     val number = enumeration<Timer.Number>("number")
-    val seconds = integer("seconds")
     val displayMessageBase = text("timer_message_base").nullable()
 
     //ギルドのID
     val guildId = long("guild_id")
 
     //動作状況
+    val seconds = integer("seconds")
     val isStarted = bool("is_started")
     val isMove = bool("is_move")
     val isFinish = bool("is_finish")

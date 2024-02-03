@@ -29,15 +29,15 @@ object TimerDataTransaction {
         Connector.connect()
 
         //TimerDataを作成
-        val timerData = TimerData(channel = channel, number = number, seconds = seconds)
+        val timerData = TimerData(channel = channel, number = number)
 
         //INSERT
         transaction {
             TimerDataTable.insert {
                 it[TimerDataTable.channel] = timerData.channel
                 it[TimerDataTable.number] = timerData.number
-                it[TimerDataTable.seconds] = timerData.seconds
                 it[guildId] = timerData.channel.guild.idLong
+                it[TimerDataTable.seconds] = seconds
                 it[isStarted] = timerData.timerServiceData.isStarted
                 it[isMove] = timerData.timerServiceData.isMove
                 it[isFinish] = timerData.timerServiceData.isFinish
@@ -68,9 +68,9 @@ object TimerDataTransaction {
             }) {
                 it[channel] = timerData.channel
                 it[number] = timerData.number
-                it[seconds] = timerData.seconds
                 it[displayMessageBase] = timerData.displayMessageBase
                 it[guildId] = timerData.channel.guild.idLong
+                it[seconds] = timerData.timerServiceData.seconds
                 it[isStarted] = timerData.timerServiceData.isStarted
                 it[isMove] = timerData.timerServiceData.isMove
                 it[isFinish] = timerData.timerServiceData.isFinish
@@ -183,9 +183,9 @@ object TimerDataTransaction {
             resultRow[TimerDataTable.timerDataId],
             resultRow[TimerDataTable.channel],
             resultRow[TimerDataTable.number],
-            resultRow[TimerDataTable.seconds],
             resultRow[TimerDataTable.displayMessageBase],
             TimerServiceData(
+                resultRow[TimerDataTable.seconds],
                 resultRow[TimerDataTable.isStarted],
                 resultRow[TimerDataTable.isMove],
                 resultRow[TimerDataTable.isFinish],

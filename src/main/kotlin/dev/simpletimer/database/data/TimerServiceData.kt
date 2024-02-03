@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 /**
  * タイマーの状態
  *
+ * @property seconds タイマーの時間
  * @property isStarted 始まっているか
  * @property isMove 動いているか
  * @property isFinish 終了しているか
@@ -14,6 +15,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class TimerServiceData(
+    var seconds: Int = 0,
     var isStarted: Boolean = false,
     var isMove: Boolean = true,
     var isFinish: Boolean = false,

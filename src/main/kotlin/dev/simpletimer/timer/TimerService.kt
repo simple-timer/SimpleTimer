@@ -9,9 +9,9 @@ import kotlinx.coroutines.launch
 /**
  * タイマーのサービス
  *
- * @property seconds 秒数
+ * @property serviceData タイマーの状態のデータです。[TimerServiceData]
  */
-class TimerService(var seconds: Int, val serviceData: TimerServiceData) {
+class TimerService(val serviceData: TimerServiceData) {
     init {
         //すでに開始している時は、コルーチンを始める
         if (serviceData.isStarted && serviceData.isMove) {
@@ -144,7 +144,7 @@ class TimerService(var seconds: Int, val serviceData: TimerServiceData) {
      */
     fun addTimer(seconds: Int) {
         //秒数を追加
-        this.seconds += seconds
+        serviceData.seconds += seconds
 
         //イベントを呼び出す
         listeners.forEach { it.onAdd(seconds) }
@@ -229,12 +229,12 @@ class TimerService(var seconds: Int, val serviceData: TimerServiceData) {
      *
      * @return 残り時間[Time]
          */
-        fun getTime(): Time {
+    fun getTime(): Time {
         //経過時間
         val elapsedTime = System.currentTimeMillis() - serviceData.startMilliTime
 
         //残りの秒数を取得する
-        var seconds = this.seconds - ((elapsedTime - serviceData.adjustTime) / 1000L).toInt()
+        var seconds = serviceData.seconds - ((elapsedTime - serviceData.adjustTime) / 1000L).toInt()
         //60で割り、小数点切り捨てで分数にする
         val minute = seconds / 60
         //分部分を除いた秒数を取得

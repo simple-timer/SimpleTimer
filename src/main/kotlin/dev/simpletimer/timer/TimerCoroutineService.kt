@@ -29,7 +29,7 @@ class TimerCoroutineService {
                     else if (timerService.serviceData.isFinish) break
 
                     //時間が経過しているとき
-                    else if (elapsedTime >= (timerService.seconds * 1000) + timerService.serviceData.adjustTime) {
+                    else if (elapsedTime >= (timerService.serviceData.seconds * 1000) + timerService.serviceData.adjustTime) {
                         //終了処理を実行
                         timerService.finish()
                         //離脱

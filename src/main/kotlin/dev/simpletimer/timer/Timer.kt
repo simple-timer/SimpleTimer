@@ -56,7 +56,7 @@ class Timer(val timerData: TimerData) : TimerService.TimerListener {
     private val langData = timerData.channel.guild.getLang()
 
     //タイマーのコルーチンなどを行っている
-    private val timerService = TimerService(timerData.seconds, timerData.timerServiceData)
+    private val timerService = TimerService(timerData.timerServiceData)
 
     //Displayを更新するか
     private var forceUpdateDisplay = false

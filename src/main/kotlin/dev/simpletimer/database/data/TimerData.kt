@@ -9,7 +9,6 @@ import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel
  *
  * @property channel タイマーを動かすテキストチャンネル
  * @property number タイマーの番号
- * @property seconds 秒数
  * @property timerServiceData 稼働のデータ
  */
 @Serializable
@@ -17,7 +16,6 @@ data class TimerData(
     var timerDataId: Long = -1,
     val channel: GuildMessageChannel,
     val number: Timer.Number,
-    var seconds: Int,
     var displayMessageBase: String? = null,
     val timerServiceData: TimerServiceData = TimerServiceData()
 )
