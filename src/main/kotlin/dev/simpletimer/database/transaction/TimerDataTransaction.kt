@@ -1,16 +1,17 @@
 package dev.simpletimer.database.transaction
 
+import dev.simpletimer.data.serializer.GuildMessageChannelSerializer
 import dev.simpletimer.database.Connector
 import dev.simpletimer.database.data.TimerData
 import dev.simpletimer.database.data.TimerServiceData
 import dev.simpletimer.database.table.TimerDataTable
 import dev.simpletimer.timer.Timer
+import kotlinx.serialization.Serializable
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
-import kotlin.concurrent.timer
 
 /**
  * [TimerDataTable]用のトランザクション
@@ -94,9 +95,12 @@ object TimerDataTransaction {
 
         //SELECT
         transaction {
-            TimerDataTable.select {
-                //チャンネルと終了済みじゃないかを確認
-                TimerDataTable.channel.eq(channel) and TimerDataTable.isFinish.eq(false)
+            //チャンネルと終了済みじゃないかを確認
+            TimerDataTable.selectAll().where {         //チャンネルと終了済みじゃないかを確認
+//チャンネルと終了済みじゃないかを確認
+                TimerDataTable.channel.eq<@Serializable(with = GuildMessageChannelSerializer::class) GuildMessageChannel>(
+                    channel
+                ) and TimerDataTable.isFinish.eq(false)
             }.forEach {
                 //結果用変数に追加
                 result.add(
@@ -120,9 +124,11 @@ object TimerDataTransaction {
 
         //SELECT
         return transaction {
-            TimerDataTable.select {
+            TimerDataTable.selectAll().where {         //チャンネルと終了済みじゃないかとNumberを確認
                 //チャンネルと終了済みじゃないかとNumberを確認
-                TimerDataTable.channel.eq(channel) and TimerDataTable.isFinish.eq(false) and TimerDataTable.number.eq(
+                TimerDataTable.channel.eq<@Serializable(with = GuildMessageChannelSerializer::class) GuildMessageChannel>(
+                    channel
+                ) and TimerDataTable.isFinish.eq(false) and TimerDataTable.number.eq(
                     number
                 )
             }.firstOrNull()?.let {
@@ -142,7 +148,7 @@ object TimerDataTransaction {
 
         //SELECT
         return transaction {
-            TimerDataTable.select { TimerDataTable.timerDataId eq timerDataId }.firstOrNull()?.let {
+            TimerDataTable.selectAll().where { TimerDataTable.timerDataId eq timerDataId }.firstOrNull()?.let {
                 serializeTimerData(it)
             }
         }
@@ -159,7 +165,7 @@ object TimerDataTransaction {
 
         //SELECT
         return transaction {
-            TimerDataTable.select { TimerDataTable.guildId eq guild.idLong }.filterNotNull().map {
+            TimerDataTable.selectAll().where { TimerDataTable.guildId eq guild.idLong }.filterNotNull().map {
                 serializeTimerData(it)
             }
         }

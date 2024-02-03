@@ -4,7 +4,7 @@ import dev.simpletimer.database.Connector
 import dev.simpletimer.database.data.GuildData
 import dev.simpletimer.database.table.GuildDataTable
 import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 
@@ -56,7 +56,7 @@ object GuildDataTransaction {
 
         //データが無いときは挿入
         if (transaction {
-                GuildDataTable.select { GuildDataTable.discordGuildId eq guildId }.limit(1).firstOrNull()
+                GuildDataTable.selectAll().where { GuildDataTable.discordGuildId eq guildId }.limit(1).firstOrNull()
             } == null) {
             insertGuildData(guildId, guildData)
             return
@@ -95,7 +95,7 @@ object GuildDataTransaction {
         Connector.connect()
 
         return transaction {
-            GuildDataTable.select { GuildDataTable.discordGuildId eq guildId }.limit(1).firstOrNull()?.let {
+            GuildDataTable.selectAll().where { GuildDataTable.discordGuildId eq guildId }.limit(1).firstOrNull()?.let {
                 GuildData(
                     it[GuildDataTable.ttsTiming],
                     it[GuildDataTable.finishTTS],
