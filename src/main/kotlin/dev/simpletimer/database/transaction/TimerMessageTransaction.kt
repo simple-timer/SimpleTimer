@@ -7,7 +7,7 @@ import dev.simpletimer.database.table.TimerMessageTable
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.upsert
 
@@ -45,7 +45,7 @@ object TimerMessageTransaction {
 
         //SELECTした結果がnullじゃない場合はtrue
         return transaction {
-            TimerMessageTable.select {
+            TimerMessageTable.selectAll().where {
                 TimerMessageTable.messageId.eq(messageId)
                     .and(TimerMessageTable.messageType.eq(TimerMessageData.MessageType.DISPLAY))
             }.firstOrNull()
@@ -63,9 +63,7 @@ object TimerMessageTransaction {
 
         //SELECT
         val timerDataId = transaction {
-            TimerMessageTable.select {
-                TimerMessageTable.messageId eq messageId
-            }.firstOrNull()?.let {
+            TimerMessageTable.selectAll().where { TimerMessageTable.messageId eq messageId }.firstOrNull()?.let {
                 //TimerMessageDataにあるTimerDataのIdを取得
                 return@transaction it[TimerMessageTable.timerDataId]
             }
@@ -86,9 +84,7 @@ object TimerMessageTransaction {
 
         //SELECT
         return transaction {
-            TimerMessageTable.select {
-                TimerMessageTable.timerDataId eq timerData.timerDataId
-            }.map {
+            TimerMessageTable.selectAll().where { TimerMessageTable.timerDataId eq timerData.timerDataId }.map {
                 TimerMessageData(
                     it[TimerMessageTable.messageId],
                     it[TimerMessageTable.messageType]

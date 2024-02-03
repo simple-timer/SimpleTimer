@@ -1,14 +1,16 @@
 package dev.simpletimer.database.transaction
 
+import dev.simpletimer.data.serializer.GuildMessageChannelSerializer
 import dev.simpletimer.database.Connector
 import dev.simpletimer.database.table.TimerQueueTable
 import dev.simpletimer.timer.Timer
+import kotlinx.serialization.Serializable
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.upsert
 
@@ -49,8 +51,11 @@ object TimerQueueTransaction {
 
         //SELECT
         return transaction {
-            TimerQueueTable.select { TimerQueueTable.channel.eq(channel) and TimerQueueTable.number.eq(number) }
-                .firstOrNull()?.let {
+            TimerQueueTable.selectAll().where {
+                TimerQueueTable.channel.eq<@Serializable(with = GuildMessageChannelSerializer::class) GuildMessageChannel>(
+                    channel
+                ) and TimerQueueTable.number.eq(number)
+            }.firstOrNull()?.let {
                     return@transaction it[TimerQueueTable.queue]
                 } ?: return@transaction mutableListOf()
         }
@@ -66,7 +71,7 @@ object TimerQueueTransaction {
         Connector.connect()
 
         return transaction {
-            TimerQueueTable.select(TimerQueueTable.guild.eq(guild)).map {
+            TimerQueueTable.selectAll().where(TimerQueueTable.guild.eq(guild)).map {
                 Triple(it[TimerQueueTable.channel], it[TimerQueueTable.number], it[TimerQueueTable.queue])
             }
         }
