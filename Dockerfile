@@ -3,7 +3,7 @@ FROM gradle AS compile
 
 WORKDIR /app
 COPY . .
-RUN ./gradlew shadowJar -i
+RUN gradle wrapper && ./gradlew shadowJar -i
 
 #Botを起動
 FROM amazoncorretto:17 AS bot
