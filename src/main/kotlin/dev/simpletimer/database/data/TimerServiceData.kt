@@ -15,7 +15,7 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class TimerServiceData(
-    var seconds: Int = 0,
+    var seconds: Int,
     var isStarted: Boolean = false,
     var isMove: Boolean = true,
     var isFinish: Boolean = false,

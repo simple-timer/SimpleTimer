@@ -17,5 +17,5 @@ data class TimerData(
     val channel: GuildMessageChannel,
     val number: Timer.Number,
     var displayMessageBase: String? = null,
-    val timerServiceData: TimerServiceData = TimerServiceData()
+    val timerServiceData: TimerServiceData
 )

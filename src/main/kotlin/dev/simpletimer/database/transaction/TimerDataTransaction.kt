@@ -29,7 +29,7 @@ object TimerDataTransaction {
         Connector.connect()
 
         //TimerDataを作成
-        val timerData = TimerData(channel = channel, number = number)
+        val timerData = TimerData(channel = channel, number = number, timerServiceData = TimerServiceData(seconds))
 
         //INSERT
         transaction {
@@ -37,7 +37,7 @@ object TimerDataTransaction {
                 it[TimerDataTable.channel] = timerData.channel
                 it[TimerDataTable.number] = timerData.number
                 it[guildId] = timerData.channel.guild.idLong
-                it[TimerDataTable.seconds] = seconds
+                it[TimerDataTable.seconds] = timerData.timerServiceData.seconds
                 it[isStarted] = timerData.timerServiceData.isStarted
                 it[isMove] = timerData.timerServiceData.isMove
                 it[isFinish] = timerData.timerServiceData.isFinish
