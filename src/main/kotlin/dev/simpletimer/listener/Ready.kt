@@ -42,6 +42,8 @@ object Ready : ListenerAdapter() {
             }
         }
 
+        //キューのDBを掃除します。
+        TimerQueueTransaction.cleanup()
         //DBのキューを登録する
         event.jda.guilds.map { TimerQueueTransaction.getQueue(it) }.forEach {
             it.forEach { (channel, number, queue) ->

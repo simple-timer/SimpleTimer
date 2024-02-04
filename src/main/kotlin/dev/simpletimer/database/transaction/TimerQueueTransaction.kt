@@ -3,6 +3,7 @@ package dev.simpletimer.database.transaction
 import dev.simpletimer.data.serializer.GuildMessageChannelSerializer
 import dev.simpletimer.data.serializer.GuildSerializer
 import dev.simpletimer.database.Connector
+import dev.simpletimer.database.table.TimerDataTable
 import dev.simpletimer.database.table.TimerQueueTable
 import dev.simpletimer.extension.decode
 import dev.simpletimer.extension.encode
@@ -97,6 +98,22 @@ object TimerQueueTransaction {
                 TimerQueueTable.channel.eq(
                     Result.success(channel).encode(GuildMessageChannelSerializer)
                 ) and TimerQueueTable.number.eq(number)
+            }
+        }
+    }
+
+    /**
+     *  キューがないレコードの削除を行います。
+     *
+     * @author mqrimo
+     */
+    fun cleanup() {
+        Connector.connect()
+
+        //SELECT-DELETE
+        transaction {
+            TimerQueueTable.selectAll().filter { it[TimerQueueTable.queue].isEmpty() }.forEach {resultRow ->
+                TimerQueueTable.deleteWhere { channel eq resultRow[TimerDataTable.channel] }
             }
         }
     }
