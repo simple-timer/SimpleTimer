@@ -15,23 +15,29 @@ import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel
  * [AudioChannel]のSerializer
  *
  */
-object AudioChannelSerializer : KSerializer<AudioChannel?> {
+object AudioChannelSerializer : KSerializer<Result<AudioChannel>> {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("AudioChannel", PrimitiveKind.LONG)
 
-    override fun serialize(encoder: Encoder, value: AudioChannel?) {
+    override fun serialize(encoder: Encoder, value: Result<AudioChannel>) {
         //idを取得
-        val idLong = value?.idLong ?: return
+        val idLong = value.getOrNull()?.idLong ?: -1
         //エンコード
         encoder.encodeLong(idLong)
     }
 
-    override fun deserialize(decoder: Decoder): AudioChannel? {
+    override fun deserialize(decoder: Decoder): Result<AudioChannel> {
+        //値を取得
+        val decodeLong = decoder.decodeLong()
+        //適切な値化を確認
+        if (decodeLong < 0) return Result.failure(NullPointerException())
         //すべてのShardを確認
         SimpleTimer.instance.shards.forEach { jda ->
             //long値からAudioChannelを取得
-            return jda.getVoiceChannelById(decoder.decodeLong()) ?: jda.getStageChannelById(decoder.decodeLong())
-            ?: return@forEach
+            return Result.success(
+                jda.getVoiceChannelById(decodeLong) ?: jda.getStageChannelById(decodeLong)
+                ?: return@forEach
+            )
         }
-        return null
+        return Result.failure(NullPointerException())
     }
 }

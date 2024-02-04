@@ -1,5 +1,6 @@
 package dev.simpletimer.database.data
 
+import dev.simpletimer.data.serializer.GuildMessageChannelSerializer
 import dev.simpletimer.timer.Timer
 import kotlinx.serialization.Serializable
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel
@@ -14,7 +15,7 @@ import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel
 @Serializable
 data class TimerData(
     var timerDataId: Long = -1,
-    val channel: GuildMessageChannel,
+    @Serializable(with = GuildMessageChannelSerializer::class) val channel: Result<GuildMessageChannel>,
     val number: Timer.Number,
     var displayMessageBase: String? = null,
     val timerServiceData: TimerServiceData

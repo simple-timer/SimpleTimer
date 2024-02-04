@@ -128,7 +128,7 @@ object MentionType : SlashCommandManager.SubCommand(CommandInfoPath.MENTION_TYPE
                 //ターゲットを結合
                 appendMessageBuffer.append(
                     langData.command.timer.targetRole.langFormat(
-                        list.filterNotNull().joinToString { "`${it.name}`" })
+                        list.mapNotNull { it.getOrNull() }.joinToString { "`${it.name}`" })
                 )
             } else {
                 //ロールがないことを結合
@@ -144,7 +144,8 @@ object MentionType : SlashCommandManager.SubCommand(CommandInfoPath.MENTION_TYPE
             if (list.isNotEmpty()) {
                 //ターゲットを結合
                 appendMessageBuffer.append(
-                    langData.command.timer.targetVC.langFormat(list.filterNotNull().joinToString { "`${it.name}`" })
+                    langData.command.timer.targetVC.langFormat(
+                        list.mapNotNull { it.getOrNull() }.joinToString { "`${it.name}`" })
                 )
             } else {
                 //ターゲットがないことを結合
@@ -185,7 +186,7 @@ object ShowRoleMentionTarget : SlashCommandManager.SubCommand(CommandInfoPath.ME
             event.hook.sendMessage(
                 "${
                     langData.command.timer.targetRole.langFormat(
-                        list.filterNotNull().joinToString { "`${it.name}`" })
+                        list.mapNotNull { it.getOrNull() }.joinToString { "`${it.name}`" })
                 }\n${langData.command.timer.targetRolePrompt}"
             ).queue()
         }
@@ -217,7 +218,7 @@ object AddRoleMentionTarget : SlashCommandManager.SubCommand(CommandInfoPath.MEN
         //ギルドのデータに保管
         val guild = event.guild!!
         val guildData = guild.getGuildData()
-        guildData.roleMentionTargets.add(role)
+        guildData.roleMentionTargets.add(Result.success(role))
         guild.setGuildData(guildData)
 
         //メッセージを出力
@@ -252,7 +253,7 @@ object RemoveRoleMentionTarget : SlashCommandManager.SubCommand(CommandInfoPath.
         //ギルドのデータから削除
         val guild = event.guild!!
         val guildData = guild.getGuildData().apply {
-            this.roleMentionTargets.removeIf { it?.id == role.id }
+            this.roleMentionTargets.removeIf { it.getOrNull()?.id == role.id }
         }
         guild.setGuildData(guildData)
 
@@ -283,7 +284,7 @@ object ShowVCMentionTarget : SlashCommandManager.SubCommand(CommandInfoPath.MENT
             event.hook.sendMessage(
                 "${
                     langData.command.timer.targetVC.langFormat(
-                        list.filterNotNull().joinToString { "`${it.name}`" })
+                        list.mapNotNull { it.getOrNull() }.joinToString { "`${it.name}`" })
                 }\n${langData.command.timer.targetVCPrompt}"
             ).queue()
         }
@@ -332,7 +333,7 @@ object AddVCMentionTarget : SlashCommandManager.SubCommand(CommandInfoPath.MENTI
         //ギルドのデータへ追加
         val guild = event.guild!!
         val guildData = guild.getGuildData().apply {
-            this.vcMentionTargets.add(channel)
+            this.vcMentionTargets.add(Result.success(channel))
         }
         guild.setGuildData(guildData)
 
@@ -379,7 +380,7 @@ object RemoveVCMentionTarget : SlashCommandManager.SubCommand(CommandInfoPath.ME
         //ギルドのデータから削除
         val guild = event.guild!!
         val guildData = guild.getGuildData().apply {
-            this.vcMentionTargets.removeIf { it?.id == channel.asGuildMessageChannel().id }
+            this.vcMentionTargets.removeIf { it.getOrNull()?.id == channel.asGuildMessageChannel().id }
         }
         guild.setGuildData(guildData)
 

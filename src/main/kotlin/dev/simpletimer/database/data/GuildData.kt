@@ -34,14 +34,16 @@ data class GuildData(
     var finishTTS: String = "x番目のタイマーが終了しました",
     var mention: Mention = Mention.VC,
     var mentionTiming: NoticeTiming = NoticeTiming.LV2,
-    var vcMentionTargets: MutableList<@Serializable(with = AudioChannelSerializer::class) AudioChannel?> = mutableListOf(),
-    var roleMentionTargets: MutableList<@Serializable(with = RoleSerializer::class) Role?> = mutableListOf(),
+    var vcMentionTargets: MutableList<@Serializable(with = AudioChannelSerializer::class) Result<AudioChannel>> = mutableListOf(),
+    var roleMentionTargets: MutableList<@Serializable(with = RoleSerializer::class) Result<Role>> = mutableListOf(),
     var diceMode: DiceMode = DiceMode.Default,
     var diceBot: String = "DiceBot",
     var list: LinkedHashMap<String, String> = linkedMapOf(),
-    var listTargetChannel: @Serializable(with = GuildMessageChannelSerializer::class) GuildMessageChannel? = null,
+    var listTargetChannel: @Serializable(with = GuildMessageChannelSerializer::class) Result<GuildMessageChannel> = Result.failure(
+        NullPointerException()
+    ),
     var listSync: Boolean = false,
-    var syncTarget: @Serializable(with = GuildSerializer::class) Guild? = null,
+    var syncTarget: @Serializable(with = GuildSerializer::class) Result<Guild> = Result.failure(NullPointerException()),
     var audio: String = "Voice",
     var needAudioAnnounce: Boolean = true,
     var lang: @Serializable(with = LangSerializer::class) Lang = Lang.JPA

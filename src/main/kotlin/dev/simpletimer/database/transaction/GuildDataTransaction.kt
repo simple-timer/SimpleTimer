@@ -1,8 +1,16 @@
 package dev.simpletimer.database.transaction
 
+import dev.simpletimer.data.serializer.AudioChannelSerializer
+import dev.simpletimer.data.serializer.GuildMessageChannelSerializer
+import dev.simpletimer.data.serializer.GuildSerializer
+import dev.simpletimer.data.serializer.RoleSerializer
 import dev.simpletimer.database.Connector
 import dev.simpletimer.database.data.GuildData
 import dev.simpletimer.database.table.GuildDataTable
+import dev.simpletimer.extension.decode
+import dev.simpletimer.extension.decodeList
+import dev.simpletimer.extension.encode
+import dev.simpletimer.extension.encodeCollection
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -30,14 +38,15 @@ object GuildDataTransaction {
                 it[finishTTS] = guildData.finishTTS
                 it[mention] = guildData.mention
                 it[mentionTiming] = guildData.mentionTiming
-                it[vcMentionTargets] = guildData.vcMentionTargets
-                it[roleMentionTargets] = guildData.roleMentionTargets
+                it[vcMentionTargets] =
+                    guildData.vcMentionTargets.encodeCollection(AudioChannelSerializer)
+                it[roleMentionTargets] = guildData.roleMentionTargets.encodeCollection(RoleSerializer)
                 it[diceMode] = guildData.diceMode
                 it[diceBot] = guildData.diceBot
                 it[list] = guildData.list
-                it[listTargetChannel] = guildData.listTargetChannel
+                it[listTargetChannel] = guildData.listTargetChannel.encode(GuildMessageChannelSerializer)
                 it[listSync] = guildData.listSync
-                it[syncTarget] = guildData.syncTarget
+                it[syncTarget] = guildData.syncTarget.encode(GuildSerializer)
                 it[audio] = guildData.audio
                 it[needAudioAnnounce] = guildData.needAudioAnnounce
                 it[lang] = guildData.lang
@@ -70,14 +79,14 @@ object GuildDataTransaction {
                 it[finishTTS] = guildData.finishTTS
                 it[mention] = guildData.mention
                 it[mentionTiming] = guildData.mentionTiming
-                it[vcMentionTargets] = guildData.vcMentionTargets
-                it[roleMentionTargets] = guildData.roleMentionTargets
+                it[vcMentionTargets] = guildData.vcMentionTargets.encodeCollection(AudioChannelSerializer)
+                it[roleMentionTargets] = guildData.roleMentionTargets.encodeCollection(RoleSerializer)
                 it[diceMode] = guildData.diceMode
                 it[diceBot] = guildData.diceBot
                 it[list] = guildData.list
-                it[listTargetChannel] = guildData.listTargetChannel
+                it[listTargetChannel] = guildData.listTargetChannel.encode(GuildMessageChannelSerializer)
                 it[listSync] = guildData.listSync
-                it[syncTarget] = guildData.syncTarget
+                it[syncTarget] = guildData.syncTarget.encode(GuildSerializer)
                 it[audio] = guildData.audio
                 it[needAudioAnnounce] = guildData.needAudioAnnounce
                 it[lang] = guildData.lang
@@ -101,14 +110,14 @@ object GuildDataTransaction {
                     it[GuildDataTable.finishTTS],
                     it[GuildDataTable.mention],
                     it[GuildDataTable.mentionTiming],
-                    it[GuildDataTable.vcMentionTargets],
-                    it[GuildDataTable.roleMentionTargets],
+                    it[GuildDataTable.vcMentionTargets].decodeList(AudioChannelSerializer).toMutableList(),
+                    it[GuildDataTable.roleMentionTargets].decodeList(RoleSerializer).toMutableList(),
                     it[GuildDataTable.diceMode],
                     it[GuildDataTable.diceBot],
                     it[GuildDataTable.list],
-                    it[GuildDataTable.listTargetChannel],
+                    it[GuildDataTable.listTargetChannel].decode(GuildMessageChannelSerializer),
                     it[GuildDataTable.listSync],
-                    it[GuildDataTable.syncTarget],
+                    it[GuildDataTable.syncTarget].decode(GuildSerializer),
                     it[GuildDataTable.audio],
                     it[GuildDataTable.needAudioAnnounce],
                     it[GuildDataTable.lang]

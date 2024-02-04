@@ -26,7 +26,8 @@ object ListSelectMenu : SelectMenuManager.SelectMenu<LinkedHashMap<String, Strin
         val options = event.selectedOptions
 
         //チャンネルを取得
-        val targetChannel = event.guild!!.getGuildData().listTargetChannel ?: event.channel as GuildMessageChannel
+        val targetChannel =
+            event.guild!!.getGuildData().listTargetChannel.getOrNull() ?: event.channel as GuildMessageChannel
 
         //言語のデータ
         val langData = event.guild!!.getLang()

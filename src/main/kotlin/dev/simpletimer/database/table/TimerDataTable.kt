@@ -1,12 +1,7 @@
 package dev.simpletimer.database.table
 
-import dev.simpletimer.data.serializer.GuildMessageChannelSerializer
 import dev.simpletimer.timer.Timer
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
-import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel
 import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.json.jsonb
 
 /**
  * 現在動いているタイマーのテーブル
@@ -16,8 +11,7 @@ object TimerDataTable : Table("timer_data") {
     val timerDataId = long("timer_data_id").autoIncrement()
 
     //タイマーの基本データ
-    val channel =
-        jsonb<@Serializable(with = GuildMessageChannelSerializer::class) GuildMessageChannel>("channel", Json.Default)
+    val channel = text("channel")
     val number = enumeration<Timer.Number>("number")
     val displayMessageBase = text("timer_message_base").nullable()
 

@@ -13,22 +13,26 @@ import net.dv8tion.jda.api.entities.Role
  * [Role]のSerializer
  *
  */
-object RoleSerializer : KSerializer<Role?> {
+object RoleSerializer : KSerializer<Result<Role>> {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("Role", PrimitiveKind.LONG)
 
-    override fun serialize(encoder: Encoder, value: Role?) {
+    override fun serialize(encoder: Encoder, value: Result<Role>) {
         //idを取得
-        val idLong = value?.idLong ?: return
+        val idLong = value.getOrNull()?.idLong ?: -1
         //エンコード
         encoder.encodeLong(idLong)
     }
 
-    override fun deserialize(decoder: Decoder): Role? {
+    override fun deserialize(decoder: Decoder): Result<Role> {
+        //値を取得
+        val decodeLong = decoder.decodeLong()
+        //適切な値化を確認
+        if (decodeLong < 0) return Result.failure(NullPointerException())
         //すべてのShardを確認
         SimpleTimer.instance.shards.forEach { jda ->
             //long値からRoleを取得
-            return jda.getRoleById(decoder.decodeLong()) ?: return@forEach
+            return Result.success(jda.getRoleById(decodeLong) ?: return@forEach)
         }
-        return null
+        return Result.failure(NullPointerException())
     }
 }

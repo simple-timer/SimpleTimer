@@ -52,8 +52,11 @@ class Timer(val timerData: TimerData) : TimerService.TimerListener {
         }
     }
 
+    //対象のチャンネル
+    private val channel = timerData.channel.getOrThrow()
+
     //言語のデータ
-    private val langData = timerData.channel.guild.getLang()
+    private val langData = channel.guild.getLang()
 
     //タイマーのコルーチンなどを行っている
     private val timerService = TimerService(timerData.timerServiceData)
@@ -134,12 +137,12 @@ class Timer(val timerData: TimerData) : TimerService.TimerListener {
         //タイマーサービスのリスナーに追加
         timerService.registerListener(this)
         //キュー用のリスナーも追加
-        timerService.registerListener(TimerQueue.getTimerQueue(timerData.channel, timerData.number))
+        timerService.registerListener(TimerQueue.getTimerQueue(channel, timerData.number))
 
         //DBに記録されているメッセージのデータを取得
         TimerMessageTransaction.getTimerMessagesFromTimerData(timerData).forEach { timeMessageData ->
             //メッセージをDiscordから取得
-            timerData.channel.retrieveMessageById(timeMessageData.messageId).queue { message ->
+            channel.retrieveMessageById(timeMessageData.messageId).queue { message ->
                 //種類を確認
                 when (timeMessageData.messageType) {
                     //通知のメッセージ
@@ -264,7 +267,7 @@ class Timer(val timerData: TimerData) : TimerService.TimerListener {
         //すでに終了している場合は終わり
         if (!check) return
 
-        val guildData = timerData.channel.guild.getGuildData()
+        val guildData = channel.guild.getGuildData()
 
         //通知を送信
         sendNoticeMessage(langData.timer.finish, NoticeTiming.LV1, true)
@@ -324,7 +327,7 @@ class Timer(val timerData: TimerData) : TimerService.TimerListener {
     private var beforeTime: TimerService.Time = timerService.getTime()
     override fun onUpdate() {
         //権限の確認
-        if (!timerData.channel.checkSimpleTimerPermission()) {
+        if (!channel.checkSimpleTimerPermission()) {
             forceUpdateDisplay = true
             return
         }
@@ -365,16 +368,16 @@ class Timer(val timerData: TimerData) : TimerService.TimerListener {
      */
     private fun sendDisplayMessage() {
         //権限の確認
-        if (!timerData.channel.checkSimpleTimerPermission()) return
+        if (!channel.checkSimpleTimerPermission()) return
 
         //埋め込みを設定後送信
-        timerData.channel.sendMessageEmbeds(generateDisplayEmbed())
+        channel.sendMessageEmbeds(generateDisplayEmbed())
             //コンポーネントを設定
             .setComponents(
                 ActionRow.of(
-                    StopButton.createButton(timerData.number, timerData.channel.guild.getLang()),
-                    FinishButton.createButton(timerData.number, timerData.channel.guild.getLang()),
-                    AddTimerButton.createButton(timerData.number, timerData.channel.guild.getLang())
+                    StopButton.createButton(timerData.number, channel.guild.getLang()),
+                    FinishButton.createButton(timerData.number, channel.guild.getLang()),
+                    AddTimerButton.createButton(timerData.number, channel.guild.getLang())
                 )
             )
             //送信
@@ -416,10 +419,10 @@ class Timer(val timerData: TimerData) : TimerService.TimerListener {
      */
     private fun sendNoticeMessage(message: String, timing: NoticeTiming, putDeleteButton: Boolean = false) {
         //権限を確認
-        if (!timerData.channel.checkSimpleTimerPermission()) return
+        if (!channel.checkSimpleTimerPermission()) return
 
         //ギルドのデータ
-        val guild = timerData.channel.guild
+        val guild = channel.guild
         val guildData = guild.getGuildData()
 
         //メンションを作成
@@ -438,13 +441,13 @@ class Timer(val timerData: TimerData) : TimerService.TimerListener {
                 //ロールに対してメンション
                 Mention.ROLE -> {
                     //メンションを作成
-                    guildData.roleMentionTargets.filterNotNull().joinToString { it.asMention }
+                    guildData.roleMentionTargets.mapNotNull { it.getOrNull() }.joinToString { it.asMention }
                 }
 
                 //特定のVCにいる人にメンション
                 Mention.TARGET_VC -> {
                     //登録しているチャンネルをすべて取得して結合
-                    guildData.vcMentionTargets.filterNotNull().joinToString(" ") { audioChannel ->
+                    guildData.vcMentionTargets.mapNotNull { it.getOrNull() }.joinToString(" ") { audioChannel ->
                         //チャンネル内のメンバーをすべて取得して結合
                         audioChannel.members.joinToString(" ") { member ->
                             //メンションの形に
@@ -489,7 +492,7 @@ class Timer(val timerData: TimerData) : TimerService.TimerListener {
             }
         //返信でできなかったときは通常どおりのメッセージを送信
             ?: {
-                timerData.channel.sendMessage(messageContext).apply {
+                channel.sendMessage(messageContext).apply {
                     //削除のボタンを設置
                     if (putDeleteButton) setComponents(
                         ActionRow.of(
@@ -512,13 +515,13 @@ class Timer(val timerData: TimerData) : TimerService.TimerListener {
      * @param timing 送信タイミング
      */
     private fun sendTTS(message: String, timing: NoticeTiming) {
-        if (!timerData.channel.checkSimpleTimerPermission()) return
+        if (!channel.checkSimpleTimerPermission()) return
 
         //何もないときは読み上げない
         if (message == "") return
 
         //ギルドのデータ
-        val guildData = timerData.channel.guild.getGuildData()
+        val guildData = channel.guild.getGuildData()
 
         if (guildData.ttsTiming.priority < timing.priority) return
 
@@ -528,7 +531,7 @@ class Timer(val timerData: TimerData) : TimerService.TimerListener {
             setTTS(true)
         }.let {
             //送信
-            timerData.channel.sendMessage(it.build()).queue { message ->
+            channel.sendMessage(it.build()).queue { message ->
                 //時間を置いてメッセージを削除
                 CoroutineScope(Dispatchers.Default).launch {
                     delay(5000)
@@ -546,7 +549,7 @@ class Timer(val timerData: TimerData) : TimerService.TimerListener {
         //ゴミ箱のボタンを設置
         displayMessage?.editMessageEmbeds(generateDisplayEmbed())?.setComponents(
             ActionRow.of(
-                DeleteMessageButton.createButton(0, timerData.channel.guild.getLang())
+                DeleteMessageButton.createButton(0, channel.guild.getLang())
             )
         )?.queue()
 

@@ -1,10 +1,12 @@
 package dev.simpletimer.database.transaction
 
 import dev.simpletimer.data.serializer.GuildMessageChannelSerializer
+import dev.simpletimer.data.serializer.GuildSerializer
 import dev.simpletimer.database.Connector
 import dev.simpletimer.database.table.TimerQueueTable
+import dev.simpletimer.extension.decode
+import dev.simpletimer.extension.encode
 import dev.simpletimer.timer.Timer
-import kotlinx.serialization.Serializable
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -31,10 +33,10 @@ object TimerQueueTransaction {
         //UPSERT
         transaction {
             TimerQueueTable.upsert {
-                it[TimerQueueTable.channel] = channel
+                it[TimerQueueTable.channel] = Result.success(channel).encode(GuildMessageChannelSerializer)
                 it[TimerQueueTable.number] = number
                 it[TimerQueueTable.queue] = queue
-                it[guild] = channel.guild
+                it[guild] = Result.success(channel.guild).encode(GuildSerializer)
             }
         }
     }
@@ -52,8 +54,8 @@ object TimerQueueTransaction {
         //SELECT
         return transaction {
             TimerQueueTable.selectAll().where {
-                TimerQueueTable.channel.eq<@Serializable(with = GuildMessageChannelSerializer::class) GuildMessageChannel>(
-                    channel
+                TimerQueueTable.channel.eq(
+                    Result.success(channel).encode(GuildMessageChannelSerializer)
                 ) and TimerQueueTable.number.eq(number)
             }.firstOrNull()?.let {
                     return@transaction it[TimerQueueTable.queue]
@@ -71,8 +73,11 @@ object TimerQueueTransaction {
         Connector.connect()
 
         return transaction {
-            TimerQueueTable.selectAll().where(TimerQueueTable.guild.eq(guild)).map {
-                Triple(it[TimerQueueTable.channel], it[TimerQueueTable.number], it[TimerQueueTable.queue])
+            TimerQueueTable.selectAll().where(TimerQueueTable.guild.eq(Result.success(guild).encode(GuildSerializer)))
+                .mapNotNull {
+                    it[TimerQueueTable.channel].decode(GuildMessageChannelSerializer).getOrNull()?.let { channel ->
+                        Triple(channel, it[TimerQueueTable.number], it[TimerQueueTable.queue])
+                    }
             }
         }
     }
@@ -88,7 +93,11 @@ object TimerQueueTransaction {
 
         //DELETE
         transaction {
-            TimerQueueTable.deleteWhere { TimerQueueTable.channel.eq(channel) and TimerQueueTable.number.eq(number) }
+            TimerQueueTable.deleteWhere {
+                TimerQueueTable.channel.eq(
+                    Result.success(channel).encode(GuildMessageChannelSerializer)
+                ) and TimerQueueTable.number.eq(number)
+            }
         }
     }
 }

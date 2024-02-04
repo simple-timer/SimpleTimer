@@ -298,7 +298,7 @@ object ListTargetChannel : SlashCommandManager.SubCommand(CommandInfoPath.LIST_T
 
         //ギルドのデータに設定をし、保存
         val guildData = guild.getGuildData().apply {
-            this.listTargetChannel = channel
+            this.listTargetChannel = Result.success(channel)
         }
         guild.setGuildData(guildData)
 
@@ -358,7 +358,7 @@ object ListSync : SlashCommandManager.SubCommand(CommandInfoPath.LIST_SYNC) {
                 //メッセージを送信
                 event.hook.sendMessage(langData.command.list.startSync).queue()
                 //ターゲットのギルドを設定
-                guildData.syncTarget = targetGuild
+                guildData.syncTarget = Result.success(targetGuild)
             }
         } else {
             event.hook.sendMessage(langData.command.list.targetSame).queue()

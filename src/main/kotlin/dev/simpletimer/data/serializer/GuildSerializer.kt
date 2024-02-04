@@ -13,22 +13,26 @@ import net.dv8tion.jda.api.entities.Guild
  * [Guild]のSerializer
  *
  */
-object GuildSerializer : KSerializer<Guild?> {
+object GuildSerializer : KSerializer<Result<Guild>> {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("Guild", PrimitiveKind.LONG)
 
-    override fun serialize(encoder: Encoder, value: Guild?) {
+    override fun serialize(encoder: Encoder, value: Result<Guild>) {
         //idを取得
-        val idLong = value?.idLong ?: return
+        val idLong = value.getOrNull()?.idLong ?: -1
         //エンコード
         encoder.encodeLong(idLong)
     }
 
-    override fun deserialize(decoder: Decoder): Guild? {
+    override fun deserialize(decoder: Decoder): Result<Guild> {
+        //値を取得
+        val decodeLong = decoder.decodeLong()
+        //適切な値化を確認
+        if (decodeLong < 0) return Result.failure(NullPointerException())
         //すべてのShardを確認
         SimpleTimer.instance.shards.forEach { jda ->
             //long値からGuildを取得
-            return jda.getGuildById(decoder.decodeLong()) ?: return@forEach
+            return Result.success(jda.getGuildById(decodeLong) ?: return@forEach)
         }
-        return null
+        return Result.failure(NullPointerException())
     }
 }

@@ -5,8 +5,9 @@ import dev.simpletimer.database.Connector
 import dev.simpletimer.database.data.TimerData
 import dev.simpletimer.database.data.TimerServiceData
 import dev.simpletimer.database.table.TimerDataTable
+import dev.simpletimer.extension.decode
+import dev.simpletimer.extension.encode
 import dev.simpletimer.timer.Timer
-import kotlinx.serialization.Serializable
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel
 import org.jetbrains.exposed.sql.*
@@ -29,14 +30,15 @@ object TimerDataTransaction {
         Connector.connect()
 
         //TimerDataを作成
-        val timerData = TimerData(channel = channel, number = number, timerServiceData = TimerServiceData(seconds))
+        val timerData =
+            TimerData(channel = Result.success(channel), number = number, timerServiceData = TimerServiceData(seconds))
 
         //INSERT
         transaction {
             TimerDataTable.insert {
-                it[TimerDataTable.channel] = timerData.channel
+                it[TimerDataTable.channel] = timerData.channel.encode(GuildMessageChannelSerializer)
                 it[TimerDataTable.number] = timerData.number
-                it[guildId] = timerData.channel.guild.idLong
+                it[guildId] = channel.guild.idLong
                 it[TimerDataTable.seconds] = timerData.timerServiceData.seconds
                 it[isStarted] = timerData.timerServiceData.isStarted
                 it[isMove] = timerData.timerServiceData.isMove
@@ -66,10 +68,10 @@ object TimerDataTransaction {
             TimerDataTable.update({
                 TimerDataTable.timerDataId eq timerData.timerDataId
             }) {
-                it[channel] = timerData.channel
+                it[channel] = timerData.channel.encode(GuildMessageChannelSerializer)
                 it[number] = timerData.number
                 it[displayMessageBase] = timerData.displayMessageBase
-                it[guildId] = timerData.channel.guild.idLong
+                if (timerData.channel.isSuccess) it[guildId] = timerData.channel.getOrNull()!!.guild.idLong
                 it[seconds] = timerData.timerServiceData.seconds
                 it[isStarted] = timerData.timerServiceData.isStarted
                 it[isMove] = timerData.timerServiceData.isMove
@@ -98,9 +100,8 @@ object TimerDataTransaction {
             //チャンネルと終了済みじゃないかを確認
             TimerDataTable.selectAll().where {         //チャンネルと終了済みじゃないかを確認
 //チャンネルと終了済みじゃないかを確認
-                TimerDataTable.channel.eq<@Serializable(with = GuildMessageChannelSerializer::class) GuildMessageChannel>(
-                    channel
-                ) and TimerDataTable.isFinish.eq(false)
+                TimerDataTable.channel.eq(Result.success(channel).encode(GuildMessageChannelSerializer)) and
+                        TimerDataTable.isFinish.eq(false)
             }.forEach {
                 //結果用変数に追加
                 result.add(
@@ -126,11 +127,9 @@ object TimerDataTransaction {
         return transaction {
             TimerDataTable.selectAll().where {         //チャンネルと終了済みじゃないかとNumberを確認
                 //チャンネルと終了済みじゃないかとNumberを確認
-                TimerDataTable.channel.eq<@Serializable(with = GuildMessageChannelSerializer::class) GuildMessageChannel>(
-                    channel
-                ) and TimerDataTable.isFinish.eq(false) and TimerDataTable.number.eq(
-                    number
-                )
+                TimerDataTable.channel.eq(Result.success(channel).encode(GuildMessageChannelSerializer)) and
+                        TimerDataTable.isFinish.eq(false) and
+                        TimerDataTable.number.eq(number)
             }.firstOrNull()?.let {
                 serializeTimerData(it)
             }
@@ -181,7 +180,7 @@ object TimerDataTransaction {
         //ひたすら代入
         return TimerData(
             resultRow[TimerDataTable.timerDataId],
-            resultRow[TimerDataTable.channel],
+            resultRow[TimerDataTable.channel].decode(GuildMessageChannelSerializer),
             resultRow[TimerDataTable.number],
             resultRow[TimerDataTable.displayMessageBase],
             TimerServiceData(
@@ -219,7 +218,7 @@ object TimerDataTransaction {
 
         //DELETE
         transaction {
-            TimerDataTable.deleteWhere { channel.eq(timerData.channel) and number.eq(timerData.number) }
+            TimerDataTable.deleteWhere { timerDataId eq timerData.timerDataId }
         }
     }
 }
