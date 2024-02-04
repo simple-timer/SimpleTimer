@@ -1,6 +1,7 @@
 package dev.simpletimer.timer
 
 import dev.simpletimer.data.lang.lang_data.LangData
+import dev.simpletimer.database.transaction.TimerDataTransaction
 import dev.simpletimer.database.transaction.TimerQueueTransaction
 import dev.simpletimer.extension.getTimerList
 import dev.simpletimer.extension.langFormat
@@ -49,7 +50,13 @@ class TimerQueue(val channel: GuildMessageChannel, val number: Timer.Number, que
     }
 
     init {
+        //キューをDBに登録します。
         TimerQueueTransaction.upsertQueue(channel, number, queue)
+
+        //タイマーのインスタンスを取得して、リスナーとして登録します。
+        TimerDataTransaction.getTimerData(channel, number)?.timerDataId?.let { timerDataId ->
+            Timer.getTimerFromTimerDataId(timerDataId)?.timerService?.registerListener(this)
+        }
     }
 
     /**

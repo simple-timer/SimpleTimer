@@ -52,14 +52,14 @@ class Timer(val timerData: TimerData) : TimerService.TimerListener {
         }
     }
 
+    //タイマーのコルーチンなどを行っている
+    val timerService = TimerService(timerData.timerServiceData)
+
     //対象のチャンネル
     private val channel = timerData.channel.getOrThrow()
 
     //言語のデータ
     private val langData = channel.guild.getLang()
-
-    //タイマーのコルーチンなどを行っている
-    private val timerService = TimerService(timerData.timerServiceData)
 
     //Displayを更新するか
     private var forceUpdateDisplay = false
@@ -136,8 +136,6 @@ class Timer(val timerData: TimerData) : TimerService.TimerListener {
 
         //タイマーサービスのリスナーに追加
         timerService.registerListener(this)
-        //キュー用のリスナーも追加
-        timerService.registerListener(TimerQueue.getTimerQueue(channel, timerData.number))
 
         //DBに記録されているメッセージのデータを取得
         TimerMessageTransaction.getTimerMessagesFromTimerData(timerData).forEach { timeMessageData ->
