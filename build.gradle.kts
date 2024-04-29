@@ -13,7 +13,7 @@ repositories {
     maven(url = "https://m2.dv8tion.net/releases")
 }
 
-val exposedVersion = "0.47.0"
+val exposedVersion = "0.50.0"
 
 dependencies {
     implementation("org.jetbrains.kotlinx", "kotlinx-coroutines-core", "1.7.3")
