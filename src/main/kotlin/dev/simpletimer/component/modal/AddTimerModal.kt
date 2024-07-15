@@ -39,6 +39,12 @@ object AddTimerModal : TimerModal<Timer.Number>("add_timer", false) {
             return
         }
 
+        //タイマーが最大値を超えていないか確認
+        if (Int.MAX_VALUE - timer.timerService.serviceData.seconds <= seconds) {
+            event.reply(langData.timer.outOfRangeValueWarning).queue()
+            return
+        }
+
         //タイマーを延長
         timer.add(seconds)
 

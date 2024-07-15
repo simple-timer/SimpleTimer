@@ -42,5 +42,6 @@ data class TimerLangData(
     val timerMaxWarning: String = "",
     val queueNumber: String = "",
     val timerNotMoveWarning: String = "",
-    val mentionOmit: String = ""
+    val mentionOmit: String = "",
+    val outOfRangeValueWarning: String = ""
 )
