@@ -23,7 +23,7 @@ object ListMenu {
 
         if (guildData.listSync) {
             val targetGuild = guildData.syncTarget
-            appendMessage = if (targetGuild != null) {
+            appendMessage = if (targetGuild.isSuccess) {
                 "この一覧は同期されています"
             } else {
                 "同期元のサーバーが見つからなかったため、このサーバーに設定されている一覧を表示しています"

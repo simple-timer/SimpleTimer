@@ -16,7 +16,7 @@ import net.dv8tion.jda.api.entities.channel.Channel
 import net.dv8tion.jda.api.requests.RestAction
 import java.io.IOException
 import java.net.ServerSocket
-import java.net.URL
+import java.net.URI
 import java.util.*
 
 /**
@@ -103,7 +103,7 @@ class SimpleTimer {
         //インターネットの接続の確認
         return try {
             //Googleに接続する
-            val url = URL("https://google.com")
+            val url = URI("https://google.com").toURL()
             url.openConnection().getInputStream().use {
                 //何もしない
             }
