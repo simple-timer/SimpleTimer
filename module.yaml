@@ -5,21 +5,21 @@ repositories:
   - url: https://m2.dv8tion.net/releases
 
 dependencies:
-  - org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3
-  - org.jetbrains.kotlin:kotlin-reflect:2.4.21
-  - net.dv8tion:JDA:5.0.0-beta.20
-  - ch.qos.logback:logback-classic:1.4.14
-  - com.github.walkyst:lavaplayer-fork:1.4.3
-  - com.github.Walkyst:lavaplayer-natives-fork:1.0.2
-  - com.charleskorn.kaml:kaml:0.57.0
-  - org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2
-  - com.github.simple-timer:bcdice-kt:1.7.2
-  - com.github.kittinunf.fuel:fuel:2.3.1
-  - org.jetbrains.exposed:exposed-core:0.47.0
-  - org.jetbrains.exposed:exposed-jdbc:0.47.0
-  - org.jetbrains.exposed:exposed-java-time:0.47.0
-  - org.jetbrains.exposed:exposed-json:0.47.0
-  - org.postgresql:postgresql:42.7.14
+  - $libs.kotlin.corountine.core
+  - $libs.kotlin.reflect
+  - $libs.jda
+  - $libs.logback.classic
+  - $libs.lavaplayer.fork
+  - $libs.lavaplayer.natives.fork
+  - $libs.kaml
+  - $libs.kotlinx.serialization.json
+  - $libs.bcdice.kt
+  - $libs.fuel
+  - $libs.exposed.core
+  - $libs.exposed.jdbc
+  - $libs.exposed.java.time
+  - $libs.exposed.json
+  - $libs.postgresql
 
 settings:
   kotlin:
