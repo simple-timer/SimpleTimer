@@ -20,7 +20,7 @@ import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel
 import net.dv8tion.jda.api.entities.emoji.Emoji
-import net.dv8tion.jda.api.interactions.components.ActionRow
+import net.dv8tion.jda.api.components.actionrow.ActionRow
 import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder
 import java.awt.Color
 import java.util.concurrent.ConcurrentHashMap
@@ -474,7 +474,7 @@ class Timer(val timerData: TimerData) : TimerService.TimerListener {
         val messageContext = "${timerData.number.format(message)}${mention}".let {
             if (it.length >= 2000) {
                 "${timerData.number.format(message)}${langData.timer.mentionOmit}"
-            }else {
+            } else {
                 it
             }
         }

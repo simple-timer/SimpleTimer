@@ -2,10 +2,11 @@ package dev.simpletimer.component.modal
 
 import dev.simpletimer.data.lang.lang_data.LangData
 import dev.simpletimer.extension.getLang
+import net.dv8tion.jda.api.components.label.Label
+import net.dv8tion.jda.api.components.textinput.TextInput
+import net.dv8tion.jda.api.components.textinput.TextInputStyle
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
-import net.dv8tion.jda.api.interactions.components.text.TextInput
-import net.dv8tion.jda.api.interactions.components.text.TextInputStyle
-import net.dv8tion.jda.api.interactions.modals.Modal
+import net.dv8tion.jda.api.modals.Modal
 
 /**
  * YesのNoを問う確認のModal
@@ -47,7 +48,7 @@ object YesOrNoModal : ModalManager.Modal<YesOrNoModal.Data>("yes_or_no") {
     }
 
     override fun createModal(data: Data, langData: LangData): Modal {
-        val input = TextInput.create("input", langData.component.modal.check, TextInputStyle.SHORT)
+        val input = TextInput.create("input", TextInputStyle.SHORT)
             .setPlaceholder(langData.component.modal.yesNo)
             .setRequired(true)
             .build()
@@ -55,7 +56,7 @@ object YesOrNoModal : ModalManager.Modal<YesOrNoModal.Data>("yes_or_no") {
         userDatum[data.userIdLong] = data
         //Modalを作って返す
         return Modal.create("yes_or_no", langData.component.modal.confirmation)
-            .addActionRow(input)
+            .addComponents(Label.of(langData.component.modal.check, input))
             .build()
     }
 

@@ -2,10 +2,11 @@ package dev.simpletimer.component.modal
 
 import dev.simpletimer.data.lang.lang_data.LangData
 import dev.simpletimer.extension.getLang
+import net.dv8tion.jda.api.components.label.Label
+import net.dv8tion.jda.api.components.textinput.TextInput
+import net.dv8tion.jda.api.components.textinput.TextInputStyle
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
-import net.dv8tion.jda.api.interactions.components.text.TextInput
-import net.dv8tion.jda.api.interactions.components.text.TextInputStyle
-import net.dv8tion.jda.api.interactions.modals.Modal
+import net.dv8tion.jda.api.modals.Modal
 
 abstract class TimerModal<T>(name: String, deferReply: Boolean = true) :
     ModalManager.Modal<T>(name, deferReply = deferReply) {
@@ -52,20 +53,20 @@ abstract class TimerModal<T>(name: String, deferReply: Boolean = true) :
         val inputNames = getInputNames(langData)
 
         //分数のInput
-        val minutesInput: TextInput = TextInput.create("minutes_input", inputNames.first, TextInputStyle.SHORT)
+        val minutesInput: TextInput = TextInput.create("minutes_input", TextInputStyle.SHORT)
             .setPlaceholder("0")
             .setRequired(false)
             .build()
 
         //秒数のInput
-        val secondsInput = TextInput.create("seconds_input", inputNames.second, TextInputStyle.SHORT)
+        val secondsInput = TextInput.create("seconds_input", TextInputStyle.SHORT)
             .setPlaceholder("0")
             .setRequired(false)
             .build()
 
         //Modalを作成して返す
         return getModalBuilder(data, langData)
-            .addActionRow(minutesInput).addActionRow(secondsInput)
+            .addComponents(Label.of(inputNames.first, minutesInput), Label.of(inputNames.second, secondsInput))
             .build()
     }
 

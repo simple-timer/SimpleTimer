@@ -38,6 +38,6 @@ object SelectMenuManager {
         abstract fun createSelectMenu(
             data: T,
             langData: LangData
-        ): net.dv8tion.jda.api.interactions.components.selections.SelectMenu
+        ): net.dv8tion.jda.api.components.selections.SelectMenu
     }
 }

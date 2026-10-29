@@ -6,7 +6,7 @@ import dev.simpletimer.extension.getLang
 import dev.simpletimer.timer.Timer
 import net.dv8tion.jda.api.entities.emoji.Emoji
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
-import net.dv8tion.jda.api.interactions.components.buttons.Button
+import net.dv8tion.jda.api.components.buttons.Button
 
 /**
  * タイマーを延長するボタン
@@ -15,7 +15,7 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button
 object AddTimerButton : ButtonManager.Button<Timer.Number>("add_timer", false) {
     override fun run(event: ButtonInteractionEvent) {
         //タイマーの番号を取得
-        val timerNumber = Timer.Number.getNumber(event.button.id!!.split(":")[1].toInt()) ?: return
+        val timerNumber = Timer.Number.getNumber(event.button.customId!!.split(":")[1].toInt()) ?: return
         //Modalを送信
         event.replyModal(AddTimerModal.createModal(timerNumber, event.guild!!.getLang())).queue()
     }

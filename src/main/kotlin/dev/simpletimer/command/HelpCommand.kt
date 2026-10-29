@@ -5,6 +5,7 @@ import dev.simpletimer.component.button.CommunityLinkButton
 import dev.simpletimer.data.lang.lang_data.command_info.CommandInfoPath
 import dev.simpletimer.extension.getLang
 import net.dv8tion.jda.api.EmbedBuilder
+import net.dv8tion.jda.api.components.actionrow.ActionRow
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 
 /**
@@ -63,7 +64,8 @@ object HelpCommand : SlashCommandManager.SlashCommand(CommandInfoPath.HELP) {
         }.build()
 
         //Embedを送信
-        event.hook.sendMessageEmbeds(embed).addActionRow(CommunityLinkButton.createButton(0, event.guild!!.getLang()))
+        event.hook.sendMessageEmbeds(embed)
+            .setComponents(ActionRow.of(CommunityLinkButton.createButton(0, event.guild!!.getLang())))
             .queue()
     }
 }

@@ -4,6 +4,7 @@ import dev.simpletimer.component.select_menu.ListSelectMenu
 import dev.simpletimer.extension.getGuildData
 import dev.simpletimer.extension.getLang
 import net.dv8tion.jda.api.EmbedBuilder
+import net.dv8tion.jda.api.components.actionrow.ActionRow
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 
 object ListMenu {
@@ -64,7 +65,7 @@ object ListMenu {
             //中身があるときは、埋め込みとメニューを送信
             event.hook.sendMessageEmbeds(builder.build())
                 .setEphemeral(true)
-                .addActionRow(ListSelectMenu.createSelectMenu(list, guild.getLang()))
+                .setComponents(ActionRow.of(ListSelectMenu.createSelectMenu(list, guild.getLang())))
                 .queue()
         }
     }

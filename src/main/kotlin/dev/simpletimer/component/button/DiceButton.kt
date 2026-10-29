@@ -4,7 +4,7 @@ import dev.simpletimer.data.lang.lang_data.LangData
 import dev.simpletimer.dice.Dice
 import net.dv8tion.jda.api.entities.emoji.Emoji
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
-import net.dv8tion.jda.api.interactions.components.buttons.Button
+import net.dv8tion.jda.api.components.buttons.Button
 
 /**
  * ダイスを振るボタン
@@ -12,7 +12,7 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button
  */
 object DiceButton : ButtonManager.Button<String>("dice") {
     override fun run(event: ButtonInteractionEvent) {
-        val buttonID = event.button.id ?: return
+        val buttonID = event.button.customId ?: return
 
         //ダイスのコマンドを取得
         val value = buttonID.replace("${name}:", "")

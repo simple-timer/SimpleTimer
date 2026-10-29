@@ -31,7 +31,7 @@ object ButtonInteraction : ListenerAdapter() {
         }
 
         //ボタンのIDを取得
-        val buttonID = event.button.id ?: return
+        val buttonID = event.button.customId ?: return
 
         //すべてのボタン
         buttonManager.buttons.filter { buttonID.split(":")[0].equalsIgnoreCase(it.name) }.forEach { button ->

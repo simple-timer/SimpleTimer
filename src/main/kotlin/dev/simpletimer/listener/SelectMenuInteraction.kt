@@ -29,7 +29,7 @@ object SelectMenuInteraction : ListenerAdapter() {
         }
 
         //選択メニューのIDを取得
-        val id = event.selectMenu.id ?: return
+        val id = event.selectMenu.customId
 
         //すべての選択メニュー
         SelectMenuManager.selectMenus.filter { id.split(":")[0].equalsIgnoreCase(it.name) }.forEach {

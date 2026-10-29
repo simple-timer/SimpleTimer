@@ -10,12 +10,12 @@ import dev.simpletimer.data.lang.lang_data.LangData
 import dev.simpletimer.extension.*
 import dev.simpletimer.util.Log
 import net.dv8tion.jda.api.EmbedBuilder
+import net.dv8tion.jda.api.components.actionrow.ActionRow
 import net.dv8tion.jda.api.entities.MessageEmbed
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
 import net.dv8tion.jda.api.exceptions.ErrorResponseException
 import net.dv8tion.jda.api.interactions.callbacks.IReplyCallback
-import net.dv8tion.jda.api.interactions.components.ActionRow
 import java.awt.Color
 
 /**
@@ -90,7 +90,7 @@ object GameSystemSelectView {
      */
     fun changePageFromButtonInteraction(event: ButtonInteractionEvent) {
         //ボタンのIDを取得
-        val buttonID = event.button.id ?: return
+        val buttonID = event.button.customId ?: return
 
         //ページを取得
         val page = buttonID.split(":")[1].toInt()

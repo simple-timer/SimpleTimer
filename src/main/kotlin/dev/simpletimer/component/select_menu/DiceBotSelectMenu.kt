@@ -4,10 +4,10 @@ import dev.simpletimer.bcdice_client.GameSystem
 import dev.simpletimer.data.lang.lang_data.LangData
 import dev.simpletimer.dice.bcdice.GameSystemSelectView
 import dev.simpletimer.extension.emoji
+import net.dv8tion.jda.api.components.selections.SelectMenu
+import net.dv8tion.jda.api.components.selections.StringSelectMenu
 import net.dv8tion.jda.api.entities.emoji.Emoji
 import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent
-import net.dv8tion.jda.api.interactions.components.selections.SelectMenu
-import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu
 
 /**
  * DiceBotを選択するセレクトメニュー

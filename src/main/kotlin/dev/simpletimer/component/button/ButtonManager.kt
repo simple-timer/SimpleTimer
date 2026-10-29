@@ -52,6 +52,6 @@ class ButtonManager {
         abstract fun createButton(
             data: T,
             langData: LangData
-        ): net.dv8tion.jda.api.interactions.components.buttons.Button
+        ): net.dv8tion.jda.api.components.buttons.Button
     }
 }

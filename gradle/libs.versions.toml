@@ -2,10 +2,9 @@
 kotlin = "2.4.21"
 kotlinx-coroutines-core = "1.11.0"
 ktor-client = "3.6.0"
-jda = "5.0.0-beta.20"
-logback = "1.4.14"
-lavaplayer = "1.4.3"
-lavaplayer-natives = "1.0.2"
+jda = "6.7.0"
+logback = "1.5.6"
+lavaplayer = "2.2.7"
 kotaml = "0.112.0"
 kotlinx-serialization-json = "1.12.0"
 exposed = "1.6.0"
@@ -16,8 +15,7 @@ kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref =
 kotlin-corountine-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines-core" }
 jda = { module = "net.dv8tion:JDA", version.ref = "jda" }
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
-lavaplayer-fork = { module = "com.github.walkyst:lavaplayer-fork", version.ref = "lavaplayer" }
-lavaplayer-natives-fork = { module = "com.github.Walkyst:lavaplayer-natives-fork", version.ref = "lavaplayer-natives" }
+lavaplayer = { module = "dev.arbjerg:lavaplayer", version.ref = "lavaplayer" }
 kotaml = { module = "io.heapy.kotaml:kotaml", version.ref = "kotaml" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }

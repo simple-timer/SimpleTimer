@@ -4,8 +4,9 @@ import dev.simpletimer.component.button.TimerButton
 import dev.simpletimer.data.lang.lang_data.LangData
 import dev.simpletimer.extension.getLang
 import dev.simpletimer.extension.langFormat
+import net.dv8tion.jda.api.components.actionrow.ActionRow
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
-import net.dv8tion.jda.api.interactions.modals.Modal
+import net.dv8tion.jda.api.modals.Modal
 
 /**
  * タイマーのボタンのModal
@@ -32,7 +33,7 @@ object TimerButtonModal : TimerModal<Byte>("timer_button") {
                 }${langData.timer.seconds.langFormat(seconds % 60)}**"
             )
         )
-            .addActionRow(TimerButton.createButton(seconds, event.guild!!.getLang()))
+            .setComponents(ActionRow.of(TimerButton.createButton(seconds, event.guild!!.getLang())))
             .queue()
     }
 

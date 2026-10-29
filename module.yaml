@@ -10,8 +10,7 @@ dependencies:
   - $libs.kotlin.reflect
   - $libs.jda
   - $libs.logback.classic
-  - $libs.lavaplayer.fork
-  - $libs.lavaplayer.natives.fork
+  - $libs.lavaplayer
   - $libs.kotaml
   - $libs.kotlinx.serialization.json
   - $libs.exposed.core

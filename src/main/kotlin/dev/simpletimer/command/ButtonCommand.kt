@@ -9,6 +9,7 @@ import dev.simpletimer.extension.langFormat
 import dev.simpletimer.util.CommandUtil.createOptionData
 import dev.simpletimer.util.CommandUtil.createSubCommandData
 import dev.simpletimer.util.CommandUtil.replyCommandError
+import net.dv8tion.jda.api.components.actionrow.ActionRow
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.interactions.commands.OptionType
 
@@ -72,7 +73,7 @@ object ButtonCommand : SlashCommandManager.SlashCommand(CommandInfoPath.BUTTON, 
 
                 //ボタンを送信
                 event.hook.sendMessage(langData.command.button.roll.langFormat("**${option.asString}**"))
-                    .addActionRow(DiceButton.createButton(option.asString, event.guild!!.getLang()))
+                    .setComponents(ActionRow.of(DiceButton.createButton(option.asString, event.guild!!.getLang())))
                     .queue()
             }
 

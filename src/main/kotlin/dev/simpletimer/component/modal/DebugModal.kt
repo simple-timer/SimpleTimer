@@ -4,10 +4,11 @@ import dev.simpletimer.SimpleTimer
 import dev.simpletimer.command.SlashCommandManager
 import dev.simpletimer.data.lang.lang_data.LangData
 import dev.simpletimer.database.transaction.TimerDataTransaction
+import net.dv8tion.jda.api.components.label.Label
+import net.dv8tion.jda.api.components.textinput.TextInput
+import net.dv8tion.jda.api.components.textinput.TextInputStyle
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
-import net.dv8tion.jda.api.interactions.components.text.TextInput
-import net.dv8tion.jda.api.interactions.components.text.TextInputStyle
-import net.dv8tion.jda.api.interactions.modals.Modal
+import net.dv8tion.jda.api.modals.Modal
 
 /**
  * デバッグ機能のModal
@@ -54,11 +55,14 @@ object DebugModal : ModalManager.Modal<Byte>("debug") {
     }
 
     //Modalを作成する
-    private val modal = Modal.create(name, "Debug").addActionRow(
-        TextInput.create("input", "入力", TextInputStyle.SHORT)
-            .setPlaceholder("値を入力してください")
-            .setRequired(true)
-            .build()
+    private val modal = Modal.create(name, "Debug").addComponents(
+        Label.of(
+            "入力",
+            TextInput.create("input", TextInputStyle.SHORT)
+                .setPlaceholder("値を入力してください")
+                .setRequired(true)
+                .build()
+        )
     ).build()
 
     override fun createModal(data: Byte, langData: LangData): Modal {
