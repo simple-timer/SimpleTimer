@@ -3,7 +3,6 @@ package dev.simpletimer
 import dev.simpletimer.audio_player.AudioPlayerManager
 import dev.simpletimer.command.SlashCommandManager
 import dev.simpletimer.data.DataContainer
-import dev.simpletimer.dice.bcdice.BCDiceManager
 import dev.simpletimer.listener.ListenerManager
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.JDA
@@ -85,9 +84,6 @@ class SimpleTimer {
             RestAction.setDefaultFailure {}
 
             startupJDA(token)
-
-            //BCDiceのマネージャーを開始
-            BCDiceManager()
 
             consoleCommand()
         }

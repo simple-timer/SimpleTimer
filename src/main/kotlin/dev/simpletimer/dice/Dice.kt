@@ -1,7 +1,7 @@
 package dev.simpletimer.dice
 
 import dev.simpletimer.data.enum.DiceMode
-import dev.simpletimer.dice.bcdice.BCDiceManager
+import dev.simpletimer.dice.bcdice.BCDiceRollResultView
 import dev.simpletimer.extension.equalsIgnoreCase
 import dev.simpletimer.extension.getGuildData
 import dev.simpletimer.extension.getLang
@@ -108,7 +108,7 @@ class Dice {
             //BCDiceのダイス
             DiceMode.BCDice -> {
                 //コマンドを実行
-                val roll = BCDiceManager.instance.roll(guild, diceCommand.lowercase())
+                val roll = BCDiceRollResultView.create(guild, diceCommand.lowercase())
 
                 //結果の確認
                 return if (roll == null) {

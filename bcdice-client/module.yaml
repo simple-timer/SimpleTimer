@@ -1,0 +1,23 @@
+product:
+  type: lib
+  platforms: [jvm]
+
+dependencies:
+  - $libs.kotlin.corountine.core
+  - $libs.kotlinx.serialization.json
+  - $libs.ktor.client
+  - $libs.ktor.client.cio
+
+settings:
+  kotlin:
+    version: 2.4.21
+    serialization:
+      version: 1.12.0
+      enabled: true
+    freeCompilerArgs:
+      - -Xskip-prerelease-check
+      - -Xallow-unstable-dependencies
+  jvm:
+    release: 26
+    jdk:
+      version: 26

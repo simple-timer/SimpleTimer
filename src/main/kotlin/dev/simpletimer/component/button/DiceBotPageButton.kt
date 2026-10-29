@@ -1,7 +1,7 @@
 package dev.simpletimer.component.button
 
 import dev.simpletimer.data.lang.lang_data.LangData
-import dev.simpletimer.dice.bcdice.BCDiceManager
+import dev.simpletimer.dice.bcdice.GameSystemSelectView
 import net.dv8tion.jda.api.entities.emoji.Emoji
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
 import net.dv8tion.jda.api.interactions.components.buttons.Button
@@ -17,8 +17,8 @@ class DiceBotPageButton {
      */
     object NextButton : ButtonManager.Button<Int>("page_next", deferReply = false) {
         override fun run(event: ButtonInteractionEvent) {
-            //BCDiceManagerの処理に任せる
-            BCDiceManager.instance.changePageFromButtonInteraction(event)
+            //GameSystemSelectViewの処理に任せる
+            GameSystemSelectView.changePageFromButtonInteraction(event)
         }
 
         override fun createButton(data: Int, langData: LangData): Button {
@@ -33,8 +33,8 @@ class DiceBotPageButton {
      */
     object BackButton : ButtonManager.Button<Int>("page_back", deferReply = false) {
         override fun run(event: ButtonInteractionEvent) {
-            //BCDiceManagerの処理に任せる
-            BCDiceManager.instance.changePageFromButtonInteraction(event)
+            //GameSystemSelectViewの処理に任せる
+            GameSystemSelectView.changePageFromButtonInteraction(event)
         }
 
         override fun createButton(data: Int, langData: LangData): Button {

@@ -8,7 +8,6 @@ lavaplayer = "1.4.3"
 lavaplayer-natives = "1.0.2"
 kotaml = "0.112.0"
 kotlinx-serialization-json = "1.12.0"
-bcdice-kt = "1.7.2"
 exposed = "0.47.0"
 postgresql = "42.7.14"
 
@@ -21,7 +20,6 @@ lavaplayer-fork = { module = "com.github.walkyst:lavaplayer-fork", version.ref =
 lavaplayer-natives-fork = { module = "com.github.Walkyst:lavaplayer-natives-fork", version.ref = "lavaplayer-natives" }
 kotaml = { module = "io.heapy.kotaml:kotaml", version.ref = "kotaml" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
-bcdice-kt = { module = "com.github.simple-timer:bcdice-kt", version.ref = "bcdice-kt" }
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
 exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed" }
 exposed-java-time = { module = "org.jetbrains.exposed:exposed-java-time", version.ref = "exposed" }

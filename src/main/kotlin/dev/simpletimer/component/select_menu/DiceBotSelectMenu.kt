@@ -1,8 +1,8 @@
 package dev.simpletimer.component.select_menu
 
-import dev.simpletimer.bcdice_kt.bcdice_task.GameSystem
+import dev.simpletimer.bcdice_client.GameSystem
 import dev.simpletimer.data.lang.lang_data.LangData
-import dev.simpletimer.dice.bcdice.BCDiceManager
+import dev.simpletimer.dice.bcdice.GameSystemSelectView
 import dev.simpletimer.extension.emoji
 import net.dv8tion.jda.api.entities.emoji.Emoji
 import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent
@@ -18,8 +18,8 @@ object DiceBotSelectMenu : SelectMenuManager.SelectMenu<ArrayList<GameSystem>>("
         //選択されているものを取得
         val id = event.selectedOptions[0]?.value ?: return
 
-        //BCDiceManagerに処理を任せる
-        BCDiceManager.instance.selectFromInteraction(event, id)
+        //GameSystemSelectViewに処理を任せる
+        GameSystemSelectView.selectFromInteraction(event, id)
     }
 
     override fun createSelectMenu(data: ArrayList<GameSystem>, langData: LangData): SelectMenu {

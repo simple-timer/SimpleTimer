@@ -1,9 +1,11 @@
 package dev.simpletimer.command.dice
 
+import dev.simpletimer.bcdice_client.BCDiceClient
 import dev.simpletimer.command.SlashCommandManager
 import dev.simpletimer.data.lang.lang_data.command_info.CommandInfoPath
 import dev.simpletimer.dice.DefaultDice
-import dev.simpletimer.dice.bcdice.BCDiceManager
+import dev.simpletimer.dice.bcdice.GameSystemInfoView
+import dev.simpletimer.dice.bcdice.GameSystemSelectView
 import dev.simpletimer.extension.*
 import dev.simpletimer.util.CommandUtil
 import kotlinx.coroutines.CoroutineScope
@@ -66,8 +68,7 @@ object DiceInfo : SlashCommandManager.SubCommand(CommandInfoPath.DICE_INFO) {
             dev.simpletimer.data.enum.DiceMode.BCDice -> {
                 //BCDiceのヘルプを取得して出力
                 CoroutineScope(Dispatchers.Default).launch {
-                    event.hook.sendMessageEmbeds(BCDiceManager.instance.getInfoEmbed(channel, guild))
-                        .queue()
+                    event.hook.sendMessageEmbeds(GameSystemInfoView.create(channel, guild)).queue()
                 }
             }
         }
@@ -99,11 +100,11 @@ object DiceBot : SlashCommandManager.SubCommand(CommandInfoPath.DICE_BOT) {
 
             CoroutineScope(Dispatchers.Default).launch {
                 //ダイスボットを変更する画面を出す
-                BCDiceManager.instance.openSelectDiceBotView(event.guildChannel)
+                GameSystemSelectView.openSelectView(event.guildChannel)
             }
         } else {
             //IDを取得してダイスボットを変更する
-            BCDiceManager.instance.selectFromInteraction(
+            GameSystemSelectView.selectFromInteraction(
                 event, if (option.asString.contains("／")) {
                     option.asString.split("／")[1]
                 } else {
@@ -120,7 +121,7 @@ object DiceBot : SlashCommandManager.SubCommand(CommandInfoPath.DICE_BOT) {
         //返す
         event.replyChoiceStrings(
             //入力を元に選択肢を作成 25個以下になる様にする
-            BCDiceManager.instance.getGameSystems().asSequence().filter {
+            BCDiceClient.instance.getGameSystems().asSequence().filter {
                 it.id.contains(
                     event.focusedOption.value, ignoreCase = true
                 ) || it.name.contains(
