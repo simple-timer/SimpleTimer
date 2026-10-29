@@ -2,8 +2,8 @@ package dev.simpletimer.database.table
 
 import dev.simpletimer.timer.Timer
 import kotlinx.serialization.json.Json
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.json.json
+import org.jetbrains.exposed.v1.core.Table
+import org.jetbrains.exposed.v1.json.json
 
 /**
  * タイマーのキュー用のテーブル

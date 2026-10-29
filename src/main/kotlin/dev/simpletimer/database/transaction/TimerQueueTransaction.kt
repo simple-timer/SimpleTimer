@@ -10,12 +10,9 @@ import dev.simpletimer.extension.encode
 import dev.simpletimer.timer.Timer
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.deleteWhere
-import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.upsert
+import org.jetbrains.exposed.v1.core.*
+import org.jetbrains.exposed.v1.jdbc.*
+import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 
 /**
  * [TimerQueueTable]用のトランザクション

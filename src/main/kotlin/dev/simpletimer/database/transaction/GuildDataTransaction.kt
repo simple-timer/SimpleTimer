@@ -11,10 +11,9 @@ import dev.simpletimer.extension.decode
 import dev.simpletimer.extension.decodeList
 import dev.simpletimer.extension.encode
 import dev.simpletimer.extension.encodeCollection
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.update
+import org.jetbrains.exposed.v1.core.*
+import org.jetbrains.exposed.v1.jdbc.*
+import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 
 /**
  * [GuildDataTable]に対するトランザクション

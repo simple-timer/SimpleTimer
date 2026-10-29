@@ -1,7 +1,7 @@
 package dev.simpletimer.database.table
 
 import dev.simpletimer.timer.Timer
-import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.v1.core.Table
 
 /**
  * 現在動いているタイマーのテーブル

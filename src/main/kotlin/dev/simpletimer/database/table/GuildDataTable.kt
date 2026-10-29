@@ -5,8 +5,8 @@ import dev.simpletimer.data.enum.Mention
 import dev.simpletimer.data.enum.NoticeTiming
 import dev.simpletimer.data.lang.Lang
 import kotlinx.serialization.json.Json
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.json.json
+import org.jetbrains.exposed.v1.core.Table
+import org.jetbrains.exposed.v1.json.json
 
 /**
  * ギルドのデータの[Table]

@@ -16,6 +16,8 @@ dependencies:
   - $libs.kotlinx.serialization.json
   - $libs.exposed.core
   - $libs.exposed.jdbc
+  - $libs.exposed.migration.core
+  - $libs.exposed.migration.jdbc
   - $libs.exposed.java.time
   - $libs.exposed.json
   - $libs.postgresql

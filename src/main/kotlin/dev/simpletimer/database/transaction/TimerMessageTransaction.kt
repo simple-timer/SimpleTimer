@@ -4,12 +4,9 @@ import dev.simpletimer.database.Connector
 import dev.simpletimer.database.data.TimerData
 import dev.simpletimer.database.data.TimerMessageData
 import dev.simpletimer.database.table.TimerMessageTable
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.deleteWhere
-import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.upsert
+import org.jetbrains.exposed.v1.core.*
+import org.jetbrains.exposed.v1.jdbc.*
+import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 
 /**
  * [TimerMessageTable]のトランザクション

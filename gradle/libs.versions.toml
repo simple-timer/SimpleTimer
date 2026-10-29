@@ -8,7 +8,7 @@ lavaplayer = "1.4.3"
 lavaplayer-natives = "1.0.2"
 kotaml = "0.112.0"
 kotlinx-serialization-json = "1.12.0"
-exposed = "0.47.0"
+exposed = "1.6.0"
 postgresql = "42.7.14"
 
 [libraries]
@@ -22,6 +22,8 @@ kotaml = { module = "io.heapy.kotaml:kotaml", version.ref = "kotaml" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
 exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed" }
+exposed-migration-core = { module = "org.jetbrains.exposed:exposed-migration-core", version.ref = "exposed" }
+exposed-migration-jdbc = { module = "org.jetbrains.exposed:exposed-migration-jdbc", version.ref = "exposed" }
 exposed-java-time = { module = "org.jetbrains.exposed:exposed-java-time", version.ref = "exposed" }
 exposed-json = { module = "org.jetbrains.exposed:exposed-json", version.ref = "exposed" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
