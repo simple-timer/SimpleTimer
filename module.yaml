@@ -27,9 +27,6 @@ settings:
     serialization:
       version: 1.12.0
       enabled: true
-    freeCompilerArgs:
-      - -Xskip-prerelease-check
-      - -Xallow-unstable-dependencies
   jvm:
     mainClass: dev.simpletimer.SimpleTimerKt
     release: 26
