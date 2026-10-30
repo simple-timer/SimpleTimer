@@ -15,7 +15,6 @@ import dev.simpletimer.database.data.GuildData
 import dev.simpletimer.database.transaction.GuildDataTransaction
 import java.io.File
 import java.nio.file.Files
-import java.nio.file.Paths
 import kotlin.reflect.KClass
 import kotlin.reflect.full.memberProperties
 
@@ -33,12 +32,14 @@ class DataContainer {
     //言語のデータ
     val langDatum = mutableMapOf<Lang, LangData>()
 
+    //コードソースのファイル
+    private val codeSourceFile = File(javaClass.protectionDomain.codeSource.location.path.substringBefore("/!"))
+
     //Jarによる実行かを確認
-    private val isJarFile = File(javaClass.protectionDomain.codeSource.location.path).isFile
+    private val isJarFile = codeSourceFile.isFile
 
     //データを置くディレクトリ
-    private val parentDirectory: File =
-        File(File(Paths.get(javaClass.protectionDomain.codeSource.location.toURI()).toString()).parentFile, "/var")
+    private val parentDirectory: File = File(codeSourceFile.parentFile, "/var")
 
     //コンフィグを保管するファイル
     private val configFile = File(parentDirectory, "config.yml")
@@ -117,7 +118,7 @@ class DataContainer {
                 }
 
                 //リソースからコピー
-                ClassLoader.getSystemResourceAsStream(resourcePath)?.use { stream ->
+                javaClass.classLoader.getResourceAsStream(resourcePath)?.use { stream ->
                     Files.copy(stream, langFile.toPath())
                 }
             }
