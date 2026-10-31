@@ -37,7 +37,9 @@ object Connector {
                 TimerMessageTable,
                 TimerQueueTable,
                 withLogs = true
-            )
+            ).forEach {
+                exec(it)
+            }
         }
     }
 }
