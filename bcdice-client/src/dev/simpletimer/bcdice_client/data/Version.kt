@@ -1,4 +1,4 @@
-package dev.simpletimer.bcdice_client
+package dev.simpletimer.bcdice_client.data
 
 import kotlinx.serialization.Serializable
 

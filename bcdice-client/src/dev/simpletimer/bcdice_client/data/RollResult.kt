@@ -1,5 +1,6 @@
-package dev.simpletimer.bcdice_client
+package dev.simpletimer.bcdice_client.data.data
 
+import dev.simpletimer.bcdice_client.Rand
 import kotlinx.serialization.Serializable
 
 /**
