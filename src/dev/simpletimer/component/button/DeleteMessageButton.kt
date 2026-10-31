@@ -2,9 +2,9 @@ package dev.simpletimer.component.button
 
 import dev.simpletimer.data.lang.lang_data.LangData
 import dev.simpletimer.extension.sendEmpty
+import net.dv8tion.jda.api.components.buttons.Button
 import net.dv8tion.jda.api.entities.emoji.Emoji
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
-import net.dv8tion.jda.api.components.buttons.Button
 
 /**
  * ボタンがついているメッセージを削除する

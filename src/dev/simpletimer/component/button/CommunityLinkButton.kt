@@ -1,8 +1,8 @@
 package dev.simpletimer.component.button
 
 import dev.simpletimer.data.lang.lang_data.LangData
-import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
 import net.dv8tion.jda.api.components.buttons.Button
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
 
 object CommunityLinkButton : ButtonManager.Button<Any>("community_link") {
     override fun run(event: ButtonInteractionEvent) {

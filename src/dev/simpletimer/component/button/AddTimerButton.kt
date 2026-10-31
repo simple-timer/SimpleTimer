@@ -4,9 +4,9 @@ import dev.simpletimer.component.modal.AddTimerModal
 import dev.simpletimer.data.lang.lang_data.LangData
 import dev.simpletimer.extension.getLang
 import dev.simpletimer.timer.Timer
+import net.dv8tion.jda.api.components.buttons.Button
 import net.dv8tion.jda.api.entities.emoji.Emoji
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
-import net.dv8tion.jda.api.components.buttons.Button
 
 /**
  * タイマーを延長するボタン

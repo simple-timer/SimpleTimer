@@ -5,9 +5,9 @@ import dev.simpletimer.extension.getLang
 import dev.simpletimer.extension.getTimer
 import dev.simpletimer.extension.sendEmpty
 import dev.simpletimer.timer.Timer
+import net.dv8tion.jda.api.components.buttons.Button
 import net.dv8tion.jda.api.entities.emoji.Emoji
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent
-import net.dv8tion.jda.api.components.buttons.Button
 
 object StopButton : ButtonManager.Button<Timer.Number>("stop_timer") {
     override fun run(event: ButtonInteractionEvent) {

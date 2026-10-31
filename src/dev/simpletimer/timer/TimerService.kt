@@ -228,7 +228,7 @@ class TimerService(val serviceData: TimerServiceData) {
      * 残り時間を取得する
      *
      * @return 残り時間[Time]
-         */
+     */
     fun getTime(): Time {
         //経過時間
         val elapsedTime = System.currentTimeMillis() - serviceData.startMilliTime

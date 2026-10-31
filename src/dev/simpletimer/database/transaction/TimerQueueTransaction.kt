@@ -10,9 +10,12 @@ import dev.simpletimer.extension.encode
 import dev.simpletimer.timer.Timer
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel
-import org.jetbrains.exposed.v1.core.*
-import org.jetbrains.exposed.v1.jdbc.*
+import org.jetbrains.exposed.v1.core.and
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.jdbc.deleteWhere
+import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
+import org.jetbrains.exposed.v1.jdbc.upsert
 
 /**
  * [TimerQueueTable]用のトランザクション
@@ -56,8 +59,8 @@ object TimerQueueTransaction {
                     Result.success(channel).encode(GuildMessageChannelSerializer)
                 ) and TimerQueueTable.number.eq(number)
             }.firstOrNull()?.let {
-                    return@transaction it[TimerQueueTable.queue]
-                } ?: return@transaction mutableListOf()
+                return@transaction it[TimerQueueTable.queue]
+            } ?: return@transaction mutableListOf()
         }
     }
 
@@ -76,7 +79,7 @@ object TimerQueueTransaction {
                     it[TimerQueueTable.channel].decode(GuildMessageChannelSerializer).getOrNull()?.let { channel ->
                         Triple(channel, it[TimerQueueTable.number], it[TimerQueueTable.queue])
                     }
-            }
+                }
         }
     }
 
@@ -109,7 +112,7 @@ object TimerQueueTransaction {
 
         //SELECT-DELETE
         transaction {
-            TimerQueueTable.selectAll().filter { it[TimerQueueTable.queue].isEmpty() }.forEach {resultRow ->
+            TimerQueueTable.selectAll().filter { it[TimerQueueTable.queue].isEmpty() }.forEach { resultRow ->
                 TimerQueueTable.deleteWhere { channel eq resultRow[TimerDataTable.channel] }
             }
         }
