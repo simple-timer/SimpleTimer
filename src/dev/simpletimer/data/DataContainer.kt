@@ -29,13 +29,14 @@ class DataContainer {
     val langDatum = mutableMapOf<Lang, LangData>()
 
     //コードソースのファイル
-    private val codeSourceFile = File(javaClass.protectionDomain.codeSource.location.path.substringBefore("/!"))
+    private val codeSourceFile =
+        File(javaClass.protectionDomain.codeSource.location.path.removePrefix("nested:").removePrefix("file:").substringBefore("/!"))
 
     //Jarによる実行かを確認
     private val isJarFile = codeSourceFile.isFile
 
     //データを置くディレクトリ
-    private val parentDirectory: File = File(codeSourceFile.parentFile, "/var")
+    private val parentDirectory: File = File(codeSourceFile.parentFile, "/data")
 
     //コンフィグを保管するファイル
     private val configFile = File(parentDirectory, "config.yml")

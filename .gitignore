@@ -8,3 +8,4 @@ server_config.yml
 libs
 .env
 docker-compose.yml
+data/

@@ -3,6 +3,7 @@
 .idea/
 libs/
 build/
+data/
 .env
 .gitattributes
 .gitignore
