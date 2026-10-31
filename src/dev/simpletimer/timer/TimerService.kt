@@ -5,6 +5,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * タイマーのサービス
@@ -90,7 +91,7 @@ class TimerService(val serviceData: TimerServiceData) {
         }
 
         CoroutineScope(Dispatchers.Default).launch {
-            delay(1)
+            delay(1.milliseconds)
             //イベントを呼び出す
             listeners.forEach { it.onRestart(check) }
         }

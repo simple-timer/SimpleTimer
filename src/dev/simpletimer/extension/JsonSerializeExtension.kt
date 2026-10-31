@@ -28,7 +28,7 @@ fun <T> Collection<T>.encodeCollection(kSerializer: KSerializer<T>): String {
  * @author mqrimo
  */
 fun <T> T.encode(kSerializer: KSerializer<T>): String {
-    return Json.Default.encodeToString(kSerializer, this)
+    return Json.encodeToString(kSerializer, this)
 }
 
 /**
@@ -55,5 +55,5 @@ fun <T> String.decodeList(kSerializer: KSerializer<T>): List<T> {
  * @author mqrimo
  */
 fun <T> String.decode(kSerializer: KSerializer<T>): T {
-    return Json.Default.decodeFromString(kSerializer, this)
+    return Json.decodeFromString(kSerializer, this)
 }

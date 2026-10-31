@@ -102,7 +102,7 @@ class TimerQueue(val channel: GuildMessageChannel, val number: Timer.Number, que
             removeAt(index)
         }.let {
             //削除後のキューの大きさを確認
-            if (it.size <= 0) {
+            if (it.isEmpty()) {
                 //消し飛ばす
                 clearQueue()
             } else {

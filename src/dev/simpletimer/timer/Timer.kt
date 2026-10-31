@@ -25,6 +25,7 @@ import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder
 import java.awt.Color
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.abs
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * 各タイマーのインスタンス用クラス
@@ -532,7 +533,7 @@ class Timer(val timerData: TimerData) : TimerService.TimerListener {
             channel.sendMessage(it.build()).queue { message ->
                 //時間を置いてメッセージを削除
                 CoroutineScope(Dispatchers.Default).launch {
-                    delay(5000)
+                    delay(5000.milliseconds)
                     message.delete().queue()
                 }
             }
@@ -553,7 +554,7 @@ class Timer(val timerData: TimerData) : TimerService.TimerListener {
 
         //つけているリアクションを削除
         CoroutineScope(Dispatchers.Default).launch {
-            delay(5000)
+            delay(5000.milliseconds)
             //リアクションを削除
             displayMessage?.clearReactions()?.queue()
 

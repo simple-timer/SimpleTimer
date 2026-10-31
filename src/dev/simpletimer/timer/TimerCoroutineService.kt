@@ -4,6 +4,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * タイマーのコールーチン
@@ -39,7 +40,7 @@ class TimerCoroutineService {
                     //イベントを呼び出す
                     timerService.listeners.forEach { it.onUpdate() }
                     //スレッドを0.5秒待つ
-                    delay(500)
+                    delay(500.milliseconds)
                 } while (true)
             }
         }

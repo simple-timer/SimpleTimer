@@ -18,9 +18,9 @@ class ConfigValueSerializer : KSerializer<ConfigValue> {
     override fun deserialize(decoder: Decoder): ConfigValue {
         val value = decoder.decodeString()
         return if (value.startsWith("$")) {
-            return ConfigValue(value, System.getenv(value.replaceFirst("$", "")) ?: "")
+            ConfigValue(value, System.getenv(value.replaceFirst("$", "")) ?: "")
         } else {
-            return ConfigValue(value = value)
+            ConfigValue(value = value)
         }
     }
 

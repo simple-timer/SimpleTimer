@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.events.message.react.GenericMessageReactionEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import java.util.*
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * リアクションの操作を行うクラス
@@ -60,9 +61,9 @@ object GenericMessageReaction : ListenerAdapter() {
         coolTime.add(idLong)
         CoroutineScope(Dispatchers.Default).launch {
             try {
-                delay(100)
+                delay(100.milliseconds)
                 coolTime.remove(idLong)
-            } catch (e: InterruptedException) {
+            } catch (_: InterruptedException) {
                 coolTime.remove(idLong)
             }
         }

@@ -5,8 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class DatabaseConfig(
-    val address: @Serializable(with = ConfigValueSerializer::class) ConfigValue = ConfigValue("\$SIMPLETIMER_DB_ADDRESS"),
-    val scheme: @Serializable(with = ConfigValueSerializer::class) ConfigValue = ConfigValue("\$SIMPLETIMER_DB_SCHEME"),
-    val user: @Serializable(with = ConfigValueSerializer::class) ConfigValue = ConfigValue("\$SIMPLETIMER_DB_USER"),
-    val password: @Serializable(with = ConfigValueSerializer::class) ConfigValue = ConfigValue("\$SIMPLETIMER_DB_PASS")
+    val address: @Serializable(with = ConfigValueSerializer::class) ConfigValue = ConfigValue($$"$SIMPLETIMER_DB_ADDRESS"),
+    val scheme: @Serializable(with = ConfigValueSerializer::class) ConfigValue = ConfigValue($$"$SIMPLETIMER_DB_SCHEME"),
+    val user: @Serializable(with = ConfigValueSerializer::class) ConfigValue = ConfigValue($$"$SIMPLETIMER_DB_USER"),
+    val password: @Serializable(with = ConfigValueSerializer::class) ConfigValue = ConfigValue($$"$SIMPLETIMER_DB_PASS")
 )

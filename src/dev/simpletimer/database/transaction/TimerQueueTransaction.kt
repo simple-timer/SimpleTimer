@@ -60,7 +60,8 @@ object TimerQueueTransaction {
                 ) and TimerQueueTable.number.eq(number)
             }.firstOrNull()?.let {
                 return@transaction it[TimerQueueTable.queue]
-            } ?: return@transaction mutableListOf()
+            }
+            return@transaction mutableListOf()
         }
     }
 

@@ -36,12 +36,12 @@ object ListSelectMenu : SelectMenuManager.SelectMenu<LinkedHashMap<String, Strin
         val option = options[0] ?: return
 
         //':'で分裂させる
-        val splitted = option.value.split(":")
+        val split = option.value.split(":")
 
         //タイマーの時
         if (option.value.startsWith("timer")) {
             //分を取得
-            val minutes = splitted[2].toInt()
+            val minutes = split[2].toInt()
 
             //使用できる番号を取得
             val usableNumber = Timer.getUsableNumber(targetChannel)
@@ -63,7 +63,7 @@ object ListSelectMenu : SelectMenuManager.SelectMenu<LinkedHashMap<String, Strin
             event.hook.sendMessage(
                 number.format(
                     langData.component.select.runListEntry.langFormat(
-                        "${splitted[1]}（${
+                        "${split[1]}（${
                             langData.timer.minutes.langFormat(
                                 minutes
                             )
@@ -77,13 +77,13 @@ object ListSelectMenu : SelectMenuManager.SelectMenu<LinkedHashMap<String, Strin
         //ダイスの要素の時
         else if (option.value.startsWith("dice")) {
             //ダイスのコマンドを取得
-            val command = splitted[2]
+            val command = split[2]
 
             //ダイスを実行
             Dice().roll(targetChannel, command, event.user)
 
             //メッセージを送信
-            event.hook.sendMessage(langData.component.select.runListEntry.langFormat("${splitted[1]}（${command}）"))
+            event.hook.sendMessage(langData.component.select.runListEntry.langFormat("${split[1]}（${command}）"))
                 .queue()
         } else {
             //空白を送信して削除する

@@ -103,7 +103,7 @@ class SimpleTimer {
             url.openConnection().getInputStream().use {
                 //何もしない
             }
-        } catch (ioException: IOException) {
+        } catch (_: IOException) {
             try {
                 //時間をおいて接続を繰り返す
                 Thread.sleep(5000)
@@ -123,7 +123,7 @@ class SimpleTimer {
         return try {
             socket = ServerSocket(LOCK_PORT)
             true
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             false
         }
     }

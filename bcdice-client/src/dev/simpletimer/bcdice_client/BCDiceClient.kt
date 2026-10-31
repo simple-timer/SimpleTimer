@@ -3,7 +3,7 @@ package dev.simpletimer.bcdice_client
 import dev.simpletimer.bcdice_client.data.GameSystem
 import dev.simpletimer.bcdice_client.data.GameSystemInfo
 import dev.simpletimer.bcdice_client.data.GameSystemList
-import dev.simpletimer.bcdice_client.data.data.RollResult
+import dev.simpletimer.bcdice_client.data.RollResult
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*
