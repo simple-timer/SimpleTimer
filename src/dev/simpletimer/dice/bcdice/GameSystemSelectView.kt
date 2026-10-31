@@ -1,7 +1,7 @@
 package dev.simpletimer.dice.bcdice
 
 import dev.simpletimer.bcdice_client.BCDiceClient
-import dev.simpletimer.bcdice_client.GameSystem
+import dev.simpletimer.bcdice_client.data.GameSystem
 import dev.simpletimer.component.button.DiceBotInfoButton
 import dev.simpletimer.component.button.DiceBotPageButton
 import dev.simpletimer.component.select_menu.DiceBotSelectMenu

@@ -1,6 +1,6 @@
 package dev.simpletimer.component.select_menu
 
-import dev.simpletimer.bcdice_client.GameSystem
+import dev.simpletimer.bcdice_client.data.GameSystem
 import dev.simpletimer.data.lang.lang_data.LangData
 import dev.simpletimer.dice.bcdice.GameSystemSelectView
 import dev.simpletimer.extension.emoji
