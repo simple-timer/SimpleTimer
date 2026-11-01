@@ -10,8 +10,10 @@ COPY . .
 RUN chmod +x ./kotlin && ./kotlin package
 
 #Botを起動
-FROM eclipse-temurin:26-jre-alpine AS bot
-RUN apk update && apk upgrade
+FROM eclipse-temurin:26-jre
+RUN apt-get update  \
+    && apt-get upgrade -y  \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 COPY --from=compile /app/build/tasks/_app_executableJarJvm/app-jvm-executable.jar .
