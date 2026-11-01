@@ -4,10 +4,12 @@ import dev.simpletimer.audio_player.AudioPlayerManager
 import dev.simpletimer.command.SlashCommandManager
 import dev.simpletimer.data.DataContainer
 import dev.simpletimer.listener.ListenerManager
+import club.minnced.discord.jdave.interop.JDaveSessionFactory
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.OnlineStatus
+import net.dv8tion.jda.api.audio.AudioModuleConfig
 import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.MessageEmbed
@@ -135,6 +137,10 @@ class SimpleTimer {
      * @author mqrimo
      */
     private fun startupJDA(token: String) {
+        // DAVEの設定
+        val audioModuleConfig = AudioModuleConfig()
+            .withDaveSessionFactory(JDaveSessionFactory())
+
         //JDAを作成
         JDABuilder.createDefault(token).apply {
             //リスナーの登録
@@ -143,6 +149,8 @@ class SimpleTimer {
             setStatus(OnlineStatus.ONLINE)
             //アクティビティを変更
             setActivity(Activity.customStatus("/helpでヘルプ表示"))
+            //オーディオモジュールを設定
+            setAudioModuleConfig(audioModuleConfig)
 
             val shardsCount = dataContainer.config.shardsCount.value.toInt()
             shards = (0 until shardsCount).map {

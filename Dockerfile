@@ -16,4 +16,4 @@ RUN apk update && apk upgrade
 WORKDIR /app
 COPY --from=compile /app/build/tasks/_app_executableJarJvm/app-jvm-executable.jar .
 
-CMD ["java", "-jar", "app-jvm-executable.jar"]
+CMD ["java", "--enable-native-access=ALL-UNNAMED", "-jar", "app-jvm-executable.jar"]

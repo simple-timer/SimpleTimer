@@ -11,6 +11,11 @@ dependencies:
   - $libs.jda
   - $libs.logback.classic
   - $libs.lavaplayer
+  - $libs.jdave.api
+  - $libs.jdave.native.linux.amd64
+  - $libs.jdave.native.linux.aarch64
+  - $libs.jdave.native.win.amd64
+  - $libs.jdave.native.darwin
   - $libs.kotaml
   - $libs.kotlinx.serialization.json
   - $libs.exposed.core

@@ -5,6 +5,7 @@ ktor-client = "3.6.0"
 jda = "6.7.0"
 logback = "1.5.6"
 lavaplayer = "2.2.7"
+jdave = "0.1.8"
 kotaml = "0.112.0"
 kotlinx-serialization-json = "1.12.0"
 exposed = "1.6.0"
@@ -16,6 +17,11 @@ kotlin-corountine-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-co
 jda = { module = "net.dv8tion:JDA", version.ref = "jda" }
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 lavaplayer = { module = "dev.arbjerg:lavaplayer", version.ref = "lavaplayer" }
+jdave-api = { module = "club.minnced:jdave-api", version.ref = "jdave" }
+jdave-native-linux-amd64 = { module = "club.minnced:jdave-native-linux-x86-64", version.ref = "jdave" }
+jdave-native-linux-aarch64 = { module = "club.minnced:jdave-native-linux-aarch64", version.ref = "jdave" }
+jdave-native-win-amd64 = { module = "club.minnced:jdave-native-win-x86-64", version.ref = "jdave" }
+jdave-native-darwin = { module = "club.minnced:jdave-native-darwin", version.ref = "jdave" }
 kotaml = { module = "io.heapy.kotaml:kotaml", version.ref = "kotaml" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
