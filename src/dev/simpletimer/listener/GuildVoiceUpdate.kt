@@ -17,24 +17,20 @@ object GuildVoiceUpdate : ListenerAdapter() {
      * @param event [GuildVoiceUpdateEvent]
      */
     override fun onGuildVoiceUpdate(event: GuildVoiceUpdateEvent) {
+        val selfUserId = SimpleTimer.instance.shards.first().selfUser.idLong
+
         //Join時
-        val channelJoin = event.channelJoined
-        if (channelJoin != null) {
-            //IDを確認
-            if (event.member.user.idLong != SimpleTimer.instance.shards.first().selfUser.idLong) return
-
-            //チャンネルを取得
-            val channel = event.channelJoined
-            //ステージチャンネルかを確認
-            if (channel !is StageChannel) return
-
-            //リクエストを送る
-            channel.requestToSpeak().queue()
+        val channelJoined = event.channelJoined
+        if (channelJoined != null && event.member.user.idLong == selfUserId) {
+            //ステージチャンネルならスピーカーリクエストを送る
+            if (channelJoined is StageChannel) {
+                channelJoined.requestToSpeak().queue()
+            }
         }
 
         //Left時
         val channelLeft = event.channelLeft
-        if (channelLeft != null) {
+        if (channelLeft != null && !event.member.user.isBot) {
             //プレイヤーを取得
             val player = event.guild.getAudioPlayer()
 
