@@ -211,8 +211,11 @@ object TimerDataTransaction {
         Connector.connect()
 
         return transaction {
-            TimerDataTable.selectAll().fetchSize
-        } ?: 0
+            TimerDataTable.selectAll()
+                .where { TimerDataTable.isFinish eq false }
+                .count()
+                .toInt()
+        }
     }
 
     /**
