@@ -3,7 +3,6 @@ package dev.simpletimer.database.transaction
 import dev.simpletimer.data.serializer.GuildMessageChannelSerializer
 import dev.simpletimer.data.serializer.GuildSerializer
 import dev.simpletimer.database.Connector
-import dev.simpletimer.database.table.TimerDataTable
 import dev.simpletimer.database.table.TimerQueueTable
 import dev.simpletimer.extension.decode
 import dev.simpletimer.extension.encode
@@ -130,7 +129,10 @@ object TimerQueueTransaction {
         //SELECT-DELETE
         transaction {
             TimerQueueTable.selectAll().filter { it[TimerQueueTable.queue].isEmpty() }.forEach { resultRow ->
-                TimerQueueTable.deleteWhere { channel eq resultRow[TimerDataTable.channel] }
+                TimerQueueTable.deleteWhere {
+                    TimerQueueTable.channel.eq(resultRow[TimerQueueTable.channel]) and
+                            TimerQueueTable.number.eq(resultRow[TimerQueueTable.number])
+                }
             }
         }
     }
