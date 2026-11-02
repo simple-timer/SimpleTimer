@@ -12,10 +12,9 @@ import dev.simpletimer.extension.decodeList
 import dev.simpletimer.extension.encode
 import dev.simpletimer.extension.encodeCollection
 import org.jetbrains.exposed.v1.core.eq
-import org.jetbrains.exposed.v1.jdbc.insert
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
-import org.jetbrains.exposed.v1.jdbc.update
+import org.jetbrains.exposed.v1.jdbc.upsert
 
 /**
  * [GuildDataTable]に対するトランザクション
@@ -23,58 +22,18 @@ import org.jetbrains.exposed.v1.jdbc.update
  */
 object GuildDataTransaction {
     /**
-     * ギルドのデータを挿入する
+     * ギルドのデータを更新・挿入する
+     * [GuildDataTable.discordGuildId]をキーに1つのクエリで行うため、重複した行は作られない
      *
      * @param guildId ギルドのId
      * @param guildData [GuildData]
      */
-    fun insertGuildData(guildId: Long, guildData: GuildData) {
+    fun upsertGuildData(guildId: Long, guildData: GuildData) {
         Connector.connect()
 
         transaction {
-            //INSERT
-            GuildDataTable.insert {
-                it[discordGuildId] = guildId
-                it[ttsTiming] = guildData.ttsTiming
-                it[finishTTS] = guildData.finishTTS
-                it[mention] = guildData.mention
-                it[mentionTiming] = guildData.mentionTiming
-                it[vcMentionTargets] =
-                    guildData.vcMentionTargets.encodeCollection(AudioChannelSerializer)
-                it[roleMentionTargets] = guildData.roleMentionTargets.encodeCollection(RoleSerializer)
-                it[diceMode] = guildData.diceMode
-                it[diceBot] = guildData.diceBot
-                it[list] = guildData.list
-                it[listTargetChannel] = guildData.listTargetChannel.encode(GuildMessageChannelSerializer)
-                it[listSync] = guildData.listSync
-                it[syncTarget] = guildData.syncTarget.encode(GuildSerializer)
-                it[audio] = guildData.audio
-                it[needAudioAnnounce] = guildData.needAudioAnnounce
-                it[lang] = guildData.lang
-            }
-        }
-    }
-
-    /**
-     * ギルドのデータを更新する
-     *
-     * @param guildId ギルドのId
-     * @param guildData [GuildData]
-     */
-    fun updateGuildData(guildId: Long, guildData: GuildData) {
-        Connector.connect()
-
-        //データが無いときは挿入
-        if (transaction {
-                GuildDataTable.selectAll().where { GuildDataTable.discordGuildId eq guildId }.limit(1).firstOrNull()
-            } == null) {
-            insertGuildData(guildId, guildData)
-            return
-        }
-
-        transaction {
-            //UPDATE
-            GuildDataTable.update({ GuildDataTable.discordGuildId eq guildId }) {
+            //UPSERT
+            GuildDataTable.upsert(GuildDataTable.discordGuildId) {
                 it[discordGuildId] = guildId
                 it[ttsTiming] = guildData.ttsTiming
                 it[finishTTS] = guildData.finishTTS

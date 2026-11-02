@@ -17,7 +17,7 @@ object GuildDataTable : Table("guild_data") {
     private val guildDataId = long("guild_data_id").autoIncrement()
 
     //DiscordのギルドのID
-    val discordGuildId = long("discord_guild_id")
+    val discordGuildId = long("discord_guild_id").uniqueIndex()
 
     //データ本体
     val ttsTiming = enumeration<NoticeTiming>("tts_timing").default(NoticeTiming.LV0)
