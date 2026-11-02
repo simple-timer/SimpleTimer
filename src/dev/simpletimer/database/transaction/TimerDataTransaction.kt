@@ -5,6 +5,7 @@ import dev.simpletimer.database.Connector
 import dev.simpletimer.database.data.TimerData
 import dev.simpletimer.database.data.TimerServiceData
 import dev.simpletimer.database.table.TimerDataTable
+import dev.simpletimer.database.table.TimerMessageTable
 import dev.simpletimer.extension.decode
 import dev.simpletimer.extension.encode
 import dev.simpletimer.timer.Timer
@@ -13,6 +14,7 @@ import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel
 import org.jetbrains.exposed.v1.core.ResultRow
 import org.jetbrains.exposed.v1.core.and
 import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.core.inList
 import org.jetbrains.exposed.v1.jdbc.deleteWhere
 import org.jetbrains.exposed.v1.jdbc.insert
 import org.jetbrains.exposed.v1.jdbc.selectAll
@@ -219,11 +221,27 @@ object TimerDataTransaction {
      * @param timerData 削除対象の[TimerData]
      */
     fun deleteTimerData(timerData: TimerData) {
+        deleteTimerData(listOf(timerData))
+    }
+
+    /**
+     * 複数の[TimerData]を1つのトランザクションで削除する
+     *
+     * @param timerDataList 削除対象の[TimerData]のリスト
+     */
+    fun deleteTimerData(timerDataList: List<TimerData>) {
+        if (timerDataList.isEmpty()) return
+
         Connector.connect()
+
+        val ids = timerDataList.map { it.timerDataId }
 
         //DELETE
         transaction {
-            TimerDataTable.deleteWhere { timerDataId eq timerData.timerDataId }
+            //メッセージのデータを削除
+            TimerMessageTable.deleteWhere { TimerMessageTable.timerDataId inList ids }
+            //タイマーのデータを削除
+            TimerDataTable.deleteWhere { timerDataId inList ids }
         }
     }
 }

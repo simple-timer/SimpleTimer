@@ -104,6 +104,22 @@ object TimerQueueTransaction {
     }
 
     /**
+     * チャンネルのすべての番号のキューをクリア
+     *
+     * @param channel [GuildMessageChannel]
+     */
+    fun clear(channel: GuildMessageChannel) {
+        Connector.connect()
+
+        //DELETE
+        transaction {
+            TimerQueueTable.deleteWhere {
+                TimerQueueTable.channel.eq(Result.success(channel).encode(GuildMessageChannelSerializer))
+            }
+        }
+    }
+
+    /**
      *  キューがないレコードの削除を行います。
      *
      * @author mqrimo

@@ -1,7 +1,9 @@
 package dev.simpletimer.listener
 
 import dev.simpletimer.database.transaction.TimerDataTransaction
-import dev.simpletimer.extension.getTimerList
+import dev.simpletimer.database.transaction.TimerQueueTransaction
+import dev.simpletimer.timer.Timer
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel
 import net.dv8tion.jda.api.events.channel.ChannelDeleteEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 
@@ -16,9 +18,19 @@ object ChannelDelete : ListenerAdapter() {
      * @param event [ChannelDeleteEvent]
      */
     override fun onChannelDelete(event: ChannelDeleteEvent) {
-        val channel = event.channel.asGuildMessageChannel()
-        channel.getTimerList().forEach {
-            TimerDataTransaction.deleteTimerData(it.timerData)
-        }
+        // メッセージチャンネル以外対象外
+        val channel = event.channel as? GuildMessageChannel ?: return
+
+        //チャンネルのタイマーのデータを取得
+        val timerDataList = TimerDataTransaction.getTimerData(channel)
+
+        // メモリ上のタイマーを破棄
+        timerDataList.forEach { Timer.getTimerFromTimerDataId(it.timerDataId)?.discard() }
+
+        // DBから一括で削除
+        TimerDataTransaction.deleteTimerData(timerDataList)
+
+        //チャンネルのキューを削除
+        TimerQueueTransaction.clear(channel)
     }
 }
