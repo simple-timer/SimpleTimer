@@ -9,7 +9,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import net.dv8tion.jda.api.events.message.react.GenericMessageReactionEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
-import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 import kotlin.time.Duration.Companion.milliseconds
 
 /**
@@ -18,7 +18,7 @@ import kotlin.time.Duration.Companion.milliseconds
  */
 object GenericMessageReaction : ListenerAdapter() {
     //各チャンネルのクールタイム用のセット
-    private val coolTime = TreeSet<Long>()
+    private val coolTime: MutableSet<Long> = ConcurrentHashMap.newKeySet()
 
     /**
      * メッセージにリアクションがされた時に呼び出される
@@ -37,28 +37,36 @@ object GenericMessageReaction : ListenerAdapter() {
             return
         }
 
-        //クールタイムの確認
+        // クールタイムの確認と確保を同時に行う
+        // 既にクールタイム中なら終了
         val idLong = event.messageIdLong
-        if (coolTime.contains(idLong)) return
+        if (!coolTime.add(idLong)) return
 
-        //タイマーの取得
-        val timerData = TimerMessageTransaction.getTimerDataByMessage(idLong) ?: return
-        val timer = Timer.getTimerFromTimerDataId(timerData.timerDataId)
+        //処理を行ったか
+        var handled = false
+        try {
+            //タイマーの取得
+            val timerData = TimerMessageTransaction.getTimerDataByMessage(idLong) ?: return
+            val timer = Timer.getTimerFromTimerDataId(timerData.timerDataId)
 
-        //タイマーの確認
-        if (timer != null) {
-            //リアクションの確認・処理
-            when (event.reaction.emoji.name) {
-                "1️⃣" -> timer.add(1 * 60)
-                "3️⃣" -> timer.add(3 * 60)
-                "5️⃣" -> timer.add(5 * 60)
-                "\uD83D\uDD1F" -> timer.add(10 * 60)
-                else -> return
+            //タイマーの確認
+            if (timer != null) {
+                //リアクションの確認・処理
+                when (event.reaction.emoji.name) {
+                    "1️⃣" -> timer.add(1 * 60)
+                    "3️⃣" -> timer.add(3 * 60)
+                    "5️⃣" -> timer.add(5 * 60)
+                    "\uD83D\uDD1F" -> timer.add(10 * 60)
+                    else -> return
+                }
             }
+            handled = true
+        } finally {
+            //処理しなかった場合はクールタイムを解除
+            if (!handled) coolTime.remove(idLong)
         }
 
-        //クールタイムの作成
-        coolTime.add(idLong)
+        //クールタイムの解除
         CoroutineScope(Dispatchers.Default).launch {
             try {
                 delay(100.milliseconds)

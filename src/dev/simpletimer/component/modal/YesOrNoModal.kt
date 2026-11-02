@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.components.textinput.TextInput
 import net.dv8tion.jda.api.components.textinput.TextInputStyle
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent
 import net.dv8tion.jda.api.modals.Modal
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * YesのNoを問う確認のModal
@@ -14,7 +15,7 @@ import net.dv8tion.jda.api.modals.Modal
  */
 object YesOrNoModal : ModalManager.Modal<YesOrNoModal.Data>("yes_or_no") {
     //ユーザーが開いているModalのデータを保管
-    private val userDatum = mutableMapOf<Long, Data>()
+    private val userDatum = ConcurrentHashMap<Long, Data>()
 
     override fun run(event: ModalInteractionEvent) {
         //言語のデータを取得
