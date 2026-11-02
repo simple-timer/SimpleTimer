@@ -2,13 +2,14 @@ package dev.simpletimer.util
 
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel
 import org.slf4j.LoggerFactory
+import java.util.concurrent.CopyOnWriteArrayList
 
 /**
  * ログのクラス
  */
 object Log {
     //ログを送信するチャンネル
-    val logChannels = mutableListOf<TextChannel>()
+    val logChannels = CopyOnWriteArrayList<TextChannel>()
 
     //ロガー
     private val logger = LoggerFactory.getLogger(this.javaClass)

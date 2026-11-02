@@ -3,6 +3,7 @@ package dev.simpletimer.audio_player
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers
 import net.dv8tion.jda.api.entities.Guild
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * オーディオプレイヤーのマネージャー
@@ -10,7 +11,7 @@ import net.dv8tion.jda.api.entities.Guild
  */
 class AudioPlayerManager {
     //各ギルドのオーディオプレイヤー
-    private val audioPlayers = mutableMapOf<Long, GuildAudioPlayer>()
+    private val audioPlayers = ConcurrentHashMap<Long, GuildAudioPlayer>()
 
     //オーディオ再生のマネージャー
     val playerManager = DefaultAudioPlayerManager().apply {
@@ -25,7 +26,7 @@ class AudioPlayerManager {
      * @return [GuildAudioPlayer]
      */
     fun getAudioPlayer(guild: Guild): GuildAudioPlayer {
-        return audioPlayers.getOrPut(guild.idLong) { GuildAudioPlayer(guild) }
+        return audioPlayers.computeIfAbsent(guild.idLong) { GuildAudioPlayer(guild) }
     }
 
     /**
