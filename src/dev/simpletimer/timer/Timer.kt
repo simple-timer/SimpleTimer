@@ -219,6 +219,19 @@ class Timer(val timerData: TimerData) : TimerService.TimerListener {
         timerService.end()
     }
 
+    /**
+     * Discordのメッセージに触れずに、インスタンスを破棄する
+     * チャンネルの削除時など、メッセージの操作ができないときに使用する
+     *
+     */
+    fun discard() {
+        // 終了のフラグを立てて、コルーチンを終了させる
+        timerData.timerServiceData.isFinish = true
+
+        // マップから削除
+        timerDataIdInstanceMap.remove(timerData.timerDataId)
+    }
+
     override fun onStart() {
         sendDisplayMessage()
 
