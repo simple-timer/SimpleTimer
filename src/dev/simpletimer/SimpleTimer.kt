@@ -201,7 +201,7 @@ class SimpleTimer {
      */
     fun getGuild(id: Long): Guild? {
         //すべてのShardを確認
-        return shards.map { it.getGuildById(id) }.firstOrNull()
+        return shards.firstNotNullOfOrNull { it.getGuildById(id) }
     }
 
     /**
