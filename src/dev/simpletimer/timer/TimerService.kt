@@ -231,8 +231,16 @@ class TimerService(val serviceData: TimerServiceData) {
      * @return 残り時間[Time]
      */
     fun getTime(): Time {
+        // 開始前
+        if (!serviceData.isStarted) {
+            return Time.getTimeFromTotalSeconds(serviceData.seconds)
+        }
+
+        // 一時停止中は停止した時刻を現在時刻として扱う
+        val now = if (serviceData.isMove) System.currentTimeMillis() else serviceData.stopTime
+
         //経過時間
-        val elapsedTime = System.currentTimeMillis() - serviceData.startMilliTime
+        val elapsedTime = now - serviceData.startMilliTime
 
         //残りの秒数を取得する
         var seconds = serviceData.seconds - ((elapsedTime - serviceData.adjustTime) / 1000L).toInt()
