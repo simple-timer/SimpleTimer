@@ -3,6 +3,7 @@ package dev.simpletimer.timer
 import dev.simpletimer.database.data.TimerServiceData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
@@ -13,6 +14,9 @@ import kotlin.time.Duration.Companion.milliseconds
  * @property serviceData タイマーの状態のデータです。[TimerServiceData]
  */
 class TimerService(val serviceData: TimerServiceData) {
+    // 実行中のJob
+    private var coroutineJob: Job? = null
+
     init {
         //すでに開始している時は、コルーチンを始める
         if (serviceData.isStarted && serviceData.isMove) {
@@ -157,8 +161,12 @@ class TimerService(val serviceData: TimerServiceData) {
      * コールーチンを開始する
      *
      */
+    @Synchronized
     private fun startCoroutine() {
-        TimerCoroutineService.start(this)
+        // 古いJobをcancel
+        coroutineJob?.cancel()
+        // 新しくコルーチンを開始
+        coroutineJob = TimerCoroutineService.start(this)
     }
 
 
