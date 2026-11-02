@@ -341,8 +341,15 @@ object ListSync : SlashCommandManager.SubCommand(CommandInfoPath.LIST_SYNC) {
         //Stringに変換
         val id = option.asString
 
-        //36進数にからLongにする
-        val long = java.lang.Long.parseLong(id, 36)
+        val long =
+            try {
+                //36進数にからLongにする
+                java.lang.Long.parseLong(id, 36)
+            } catch (_: NumberFormatException) {
+                //メッセージを送信
+                event.hook.sendMessage(langData.command.list.invalidID).queue()
+                return
+            }
 
         //ギルドのIDが違うかを確認
         if (guild.idLong != long) {
