@@ -56,11 +56,13 @@ class TimerService(val serviceData: TimerServiceData) {
         //既に止まっているかを確認
         val check = serviceData.isMove
 
-        //タイマーを止める
-        serviceData.isMove = false
+        if (check) {
+            //タイマーを止める
+            serviceData.isMove = false
 
-        //停止時の時間を保存
-        serviceData.stopTime = System.currentTimeMillis()
+            //停止時の時間を保存
+            serviceData.stopTime = System.currentTimeMillis()
+        }
 
         //イベントを呼び出す
         listeners.forEach { it.onStop(check) }
