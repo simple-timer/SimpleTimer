@@ -2,6 +2,7 @@ package dev.simpletimer.timer
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
@@ -15,10 +16,11 @@ class TimerCoroutineService {
          * [TimerService]のコールーチンを開始する
          *
          * @param timerService [TimerService]
+         * @return 開始したコールーチンの[Job]
          */
-        fun start(timerService: TimerService) {
+        fun start(timerService: TimerService): Job {
             //別スレッドでタイマーを開始
-            CoroutineScope(Dispatchers.Default).launch {
+            return CoroutineScope(Dispatchers.Default).launch {
                 do {
                     //経過時間を更新
                     val elapsedTime = System.currentTimeMillis() - timerService.serviceData.startMilliTime
