@@ -64,7 +64,11 @@ class SimpleTimer {
             waitInternetConnection()
 
             //ポートのロックがされていないかを確認します
-            if (!checkPortLock()) return@let
+            if (!checkPortLock()) {
+                //コンソールに出力
+                println("ERROR: Could not bind port $LOCK_PORT. Another instance of SimpleTimer may already be running, or the port could not be bound (ports below 1024 require root privileges on Linux).")
+                return@let
+            }
 
             //インスタンスを代入
             instance = this
@@ -99,19 +103,26 @@ class SimpleTimer {
      */
     private fun waitInternetConnection() {
         //インターネットの接続の確認
-        return try {
-            //Googleに接続する
-            val url = URI("https://google.com").toURL()
-            url.openConnection().getInputStream().use {
-                //何もしない
-            }
-        } catch (_: IOException) {
+        while (true) {
             try {
-                //時間をおいて接続を繰り返す
-                Thread.sleep(5000)
-                waitInternetConnection()
-            } catch (interruptedException: InterruptedException) {
-                interruptedException.printStackTrace()
+                //Googleに接続する
+                val url = URI("https://google.com").toURL()
+                url.openConnection().apply {
+                    //タイムアウトを設定
+                    connectTimeout = 10000
+                    readTimeout = 10000
+                }.getInputStream().use {
+                    //何もしない
+                }
+                return
+            } catch (_: IOException) {
+                try {
+                    //時間をおいて接続を繰り返す
+                    Thread.sleep(5000)
+                } catch (interruptedException: InterruptedException) {
+                    interruptedException.printStackTrace()
+                    return
+                }
             }
         }
     }
