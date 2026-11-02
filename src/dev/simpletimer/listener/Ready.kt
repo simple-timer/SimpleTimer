@@ -37,8 +37,15 @@ object Ready : ListenerAdapter() {
 
         //DB上のタイマー再開などをする
         event.jda.guilds.map { TimerDataTransaction.getTimerData(it) }.forEach {
-            it.forEach { timerData ->
-                Timer(timerData)
+            it.forEach timerData@{ timerData ->
+                // チャンネルを取得できなかったタイマーは飛ばす
+                if (timerData.channel.isFailure) return@timerData
+                try {
+                    // Timerのインスタンスを復元
+                    Timer(timerData)
+                } catch (e: Exception) {
+                    Log.sendLog("タイマーの復元に失敗しました: ${e.stackTraceToString()}", true)
+                }
             }
         }
 
