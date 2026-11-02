@@ -34,7 +34,7 @@ class TimerCommands {
             }
 
             //長さを確認
-            if (option.asLong * 60 > Int.MAX_VALUE) {
+            if (option.asLong <= 0 || option.asLong * 60 > Int.MAX_VALUE) {
                 replyCommandError(event)
                 return
             }
