@@ -30,10 +30,10 @@ object GuildMessageChannelSerializer : KSerializer<Result<GuildMessageChannel>> 
         if (decodeLong < 0) return Result.failure(NullPointerException())
         //すべてのShardを確認
         SimpleTimer.instance.shards.forEach { jda ->
-            //long値からTextChannelとThreadChannelを取得
+            //long値からGuildMessageChannel(テキスト・VC・ステージ・ニュース・スレッドなど)を取得
             return Result.success(
-                jda.getTextChannelById(decodeLong) ?: jda.getThreadChannelById(decodeLong)
-                ?: return@forEach
+                jda.getGuildChannelById(decodeLong) as? GuildMessageChannel
+                    ?: return@forEach
             )
         }
         return Result.failure(NullPointerException())
