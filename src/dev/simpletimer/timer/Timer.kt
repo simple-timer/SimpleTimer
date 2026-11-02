@@ -3,6 +3,7 @@ package dev.simpletimer.timer
 import dev.simpletimer.component.button.AddTimerButton
 import dev.simpletimer.component.button.DeleteMessageButton
 import dev.simpletimer.component.button.FinishButton
+import dev.simpletimer.component.button.RestartButton
 import dev.simpletimer.component.button.StopButton
 import dev.simpletimer.data.enum.Mention
 import dev.simpletimer.data.enum.NoticeTiming
@@ -255,8 +256,8 @@ class Timer(val timerData: TimerData) : TimerService.TimerListener {
             return
         }
 
-        //Displayを更新
-        displayMessage?.editMessageEmbeds(generateDisplayEmbed())?.queue()
+        //Displayを更新（ボタンも再開ボタンに切り替える）
+        displayMessage?.editMessageEmbeds(generateDisplayEmbed())?.setComponents(generateDisplayActionRow())?.queue()
         //通知系を送信
         sendNoticeMessage(langData.timer.stop, NoticeTiming.LV3)
         sendTTS(langData.timer.stop, NoticeTiming.LV3)
@@ -392,13 +393,7 @@ class Timer(val timerData: TimerData) : TimerService.TimerListener {
         //埋め込みを設定後送信
         channel.sendMessageEmbeds(generateDisplayEmbed())
             //コンポーネントを設定
-            .setComponents(
-                ActionRow.of(
-                    StopButton.createButton(timerData.number, channel.guild.getLang()),
-                    FinishButton.createButton(timerData.number, channel.guild.getLang()),
-                    AddTimerButton.createButton(timerData.number, channel.guild.getLang())
-                )
-            )
+            .setComponents(generateDisplayActionRow())
             //送信
             .queue { displayMessage ->
                 this.displayMessage = displayMessage
@@ -428,6 +423,26 @@ class Timer(val timerData: TimerData) : TimerService.TimerListener {
         //色を適用
         setColor(timerData.number.color)
     }.build()
+
+    /**
+     * Display用の[ActionRow]を作成する
+     *
+     * @return [ActionRow]
+     */
+    private fun generateDisplayActionRow(): ActionRow {
+        val lang = channel.guild.getLang()
+        //停止状態に応じてボタンを切り替え
+        val stopOrRestartButton = if (timerData.timerServiceData.isMove) {
+            StopButton.createButton(timerData.number, lang)
+        } else {
+            RestartButton.createButton(timerData.number, lang)
+        }
+        return ActionRow.of(
+            stopOrRestartButton,
+            FinishButton.createButton(timerData.number, lang),
+            AddTimerButton.createButton(timerData.number, lang)
+        )
+    }
 
     /**
      * 汎用メッセージを送信する
