@@ -16,20 +16,18 @@ object Connector {
     //データベースのコンフィグ
     private val databaseConfig = SimpleTimer.instance.dataContainer.config.databaseConfig
 
-    /**
-     * 接続
-     *
-     */
-    fun connect() {
+    //データベース
+    private val database: Database by lazy {
         //接続
-        Database.connect(
+        val database = Database.connect(
             "jdbc:postgresql://${databaseConfig.address.value}/${databaseConfig.scheme.value}",
             "org.postgresql.Driver",
             databaseConfig.user.value,
             databaseConfig.password.value
         )
 
-        transaction {
+        // マイグレーション
+        transaction(database) {
             //テーブルを作成
             MigrationUtils.statementsRequiredForDatabaseMigration(
                 GuildDataTable,
@@ -41,5 +39,15 @@ object Connector {
                 exec(it)
             }
         }
+
+        database
+    }
+
+    /**
+     * 接続
+     *
+     */
+    fun connect() {
+        database
     }
 }
