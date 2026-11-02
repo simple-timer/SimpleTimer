@@ -1,0 +1,39 @@
+product: jvm/app
+
+repositories:
+  - url: https://jitpack.io
+  - url: https://m2.dv8tion.net/releases
+
+dependencies:
+  - ./bcdice-client
+  - $libs.kotlin.corountine.core
+  - $libs.kotlin.reflect
+  - $libs.jda
+  - $libs.logback.classic
+  - $libs.lavaplayer
+  - $libs.jdave.api
+  - $libs.jdave.native.linux.amd64
+  - $libs.jdave.native.linux.aarch64
+  - $libs.jdave.native.win.amd64
+  - $libs.jdave.native.darwin
+  - $libs.kotaml
+  - $libs.kotlinx.serialization.json
+  - $libs.exposed.core
+  - $libs.exposed.jdbc
+  - $libs.exposed.migration.core
+  - $libs.exposed.migration.jdbc
+  - $libs.exposed.java.time
+  - $libs.exposed.json
+  - $libs.postgresql
+
+settings:
+  kotlin:
+    version: 2.4.21
+    serialization:
+      version: 1.12.0
+      enabled: true
+  jvm:
+    mainClass: dev.simpletimer.SimpleTimerKt
+    release: 26
+    jdk:
+      version: 26

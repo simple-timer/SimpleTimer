@@ -1,0 +1,46 @@
+package dev.simpletimer.timer
+
+import kotlinx.coroutines.*
+import kotlin.time.Duration.Companion.milliseconds
+
+/**
+ * タイマーのコールーチン
+ */
+class TimerCoroutineService {
+    companion object {
+        /**
+         * [TimerService]のコールーチンを開始する
+         *
+         * @param timerService [TimerService]
+         * @return 開始したコールーチンの[Job]
+         */
+        fun start(timerService: TimerService): Job {
+            //別スレッドでタイマーを開始
+            return CoroutineScope(Dispatchers.Default).launch {
+                do {
+                    //経過時間を更新
+                    val elapsedTime = System.currentTimeMillis() - timerService.serviceData.startMilliTime
+
+                    //動いていないときは離脱
+                    if (!timerService.serviceData.isMove) break
+
+                    //終了のフラグが立っているときも離脱
+                    else if (timerService.serviceData.isFinish) break
+
+                    //時間が経過しているとき
+                    else if (elapsedTime >= (timerService.serviceData.seconds * 1000) + timerService.serviceData.adjustTime) {
+                        //終了処理を実行
+                        timerService.finish()
+                        //離脱
+                        break
+                    }
+
+                    //イベントを呼び出す
+                    timerService.listeners.forEach { it.onUpdate() }
+                    //スレッドを0.5秒待つ
+                    delay(500.milliseconds)
+                } while (true)
+            }
+        }
+    }
+}

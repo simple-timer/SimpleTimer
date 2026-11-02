@@ -1,10 +1,11 @@
-.idea
+.idea/
 .gradle
 *.iml
 out
-build
+/build/
 classes
 server_config.yml
 libs
 .env
 docker-compose.yml
+data/
