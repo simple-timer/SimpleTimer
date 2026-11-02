@@ -6,6 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.time.Duration.Companion.milliseconds
 
 /**
@@ -171,15 +172,17 @@ class TimerService(val serviceData: TimerServiceData) {
 
 
     //イベントを受け取るリスナー
-    val listeners = ArrayList<TimerListener>()
+    val listeners = CopyOnWriteArrayList<TimerListener>()
 
     /**
      * リスナーを登録する
+     * 既に登録されている場合は何もしない
      *
      * @param listener 登録するリスナー[TimerListener]
      */
     fun registerListener(listener: TimerListener) {
-        listeners.add(listener)
+        //二重登録を防ぐ
+        listeners.addIfAbsent(listener)
     }
 
     /**

@@ -37,6 +37,17 @@ class TimerQueue(val channel: GuildMessageChannel, val number: Timer.Number, que
         }
 
         /**
+         * キャッシュ済みのタイマーのキューを取得する
+         *
+         * @param channel [GuildMessageChannel]
+         * @param number [Timer.Number]
+         * @return [TimerQueue]、存在しない場合はnull
+         */
+        fun getTimerQueueOrNull(channel: GuildMessageChannel, number: Timer.Number): TimerQueue? {
+            return timerQueues[channel.idLong]?.get(number)
+        }
+
+        /**
          * タイマーキューを登録する
          *
          * @param channel [GuildMessageChannel]
@@ -44,8 +55,20 @@ class TimerQueue(val channel: GuildMessageChannel, val number: Timer.Number, que
          * @param queue キューの内容
          */
         fun registerTimerQueue(channel: GuildMessageChannel, number: Timer.Number, queue: List<Int>) {
+            // mapを取得
+            val queues = timerQueues.getOrPut(channel.idLong) { ConcurrentHashMap() }
+
+            // 既にインスタンスがあるか
+            val existing = queues[number]
+            if (existing != null) {
+                // ない場合、新しいキューを作成
+                TimerQueueTransaction.upsertQueue(channel, number, queue)
+                existing.attachToCurrentTimer()
+                return
+            }
+
             //mapに追加
-            timerQueues.getOrPut(channel.idLong) { ConcurrentHashMap() }[number] = TimerQueue(channel, number, queue)
+            queues[number] = TimerQueue(channel, number, queue)
         }
     }
 
@@ -53,6 +76,15 @@ class TimerQueue(val channel: GuildMessageChannel, val number: Timer.Number, que
         //キューをDBに登録します。
         TimerQueueTransaction.upsertQueue(channel, number, queue)
 
+        //タイマーのインスタンスを取得して、リスナーとして登録します。
+        attachToCurrentTimer()
+    }
+
+    /**
+     * 現在動いているタイマーのリスナーとして登録する
+     *
+     */
+    private fun attachToCurrentTimer() {
         //タイマーのインスタンスを取得して、リスナーとして登録します。
         TimerDataTransaction.getTimerData(channel, number)?.timerDataId?.let { timerDataId ->
             Timer.getTimerFromTimerDataId(timerDataId)?.timerService?.registerListener(this)
@@ -77,8 +109,9 @@ class TimerQueue(val channel: GuildMessageChannel, val number: Timer.Number, que
                 TimerQueueTransaction.upsertQueue(channel, number, it)
             }
         } else {
-            //タイマーを開始し、インスタンスを代入する
-            Timer(channel, number, seconds).start()
+            //タイマーを作成し、リスナーとして登録してから開始する
+            Timer(channel, number, seconds)
+                .apply { timerService.registerListener(this@TimerQueue) }.start()
         }
     }
 
@@ -122,13 +155,18 @@ class TimerQueue(val channel: GuildMessageChannel, val number: Timer.Number, que
     }
 
     override fun onFinish(check: Boolean) {
+        //すでに終了している場合は何もしない
+        if (!check) return
+
         val queue = TimerQueueTransaction.getQueue(channel, number).toMutableList()
 
         //キューがあるかを確認
         if (queue.isEmpty()) return
 
-        //タイマーを作成し、開始させる
-        Timer(channel, number, queue[0]).start()
+        //タイマーを作成し、リスナーとして登録してから開始させる
+        Timer(channel, number, queue[0])
+            .apply { timerService.registerListener(this@TimerQueue) }
+            .start()
 
         //キューを削除
         removeQueueIndex(0)

@@ -138,6 +138,9 @@ class Timer(val timerData: TimerData) : TimerService.TimerListener {
         //タイマーサービスのリスナーに追加
         timerService.registerListener(this)
 
+        //キューが既に存在する場合は、キューもリスナーとして登録
+        TimerQueue.getTimerQueueOrNull(channel, timerData.number)?.let { timerService.registerListener(it) }
+
         //DBに記録されているメッセージのデータを取得
         TimerMessageTransaction.getTimerMessagesFromTimerData(timerData).forEach { timeMessageData ->
             //メッセージをDiscordから取得
