@@ -64,7 +64,11 @@ class SimpleTimer {
             waitInternetConnection()
 
             //ポートのロックがされていないかを確認します
-            if (!checkPortLock()) return@let
+            if (!checkPortLock()) {
+                //コンソールに出力
+                println("ERROR: Could not bind port $LOCK_PORT. Another instance of SimpleTimer may already be running, or the port could not be bound (ports below 1024 require root privileges on Linux).")
+                return@let
+            }
 
             //インスタンスを代入
             instance = this
