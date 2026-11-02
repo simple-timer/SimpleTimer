@@ -316,11 +316,11 @@ class Timer(val timerData: TimerData) : TimerService.TimerListener {
             val absSeconds = abs(seconds)
             //1分以上の短縮
             if (absSeconds >= 60) {
-                langData.timer.minus.langFormatTime(langData, seconds / 60, seconds % 60)
+                langData.timer.minus.langFormatTime(langData, absSeconds / 60, absSeconds % 60)
             }
             //1分以下の短縮
             else {
-                langData.timer.minus.langFormat(langData.timer.seconds.langFormat(seconds))
+                langData.timer.minus.langFormat(langData.timer.seconds.langFormat(absSeconds))
             }
         }
 
