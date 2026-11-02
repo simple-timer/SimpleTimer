@@ -39,7 +39,7 @@ fun Guild.getGuildData(): GuildData {
  * @param guildData [GuildData]
  */
 fun Guild.setGuildData(guildData: GuildData) {
-    GuildDataTransaction.updateGuildData(idLong, guildData)
+    GuildDataTransaction.upsertGuildData(idLong, guildData)
 }
 
 /**

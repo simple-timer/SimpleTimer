@@ -146,7 +146,7 @@ class DataContainer {
                 val guildData = file.inputStream().use {
                     Yaml(configuration = YamlConfiguration()).decodeFromStream(GuildData.serializer(), it)
                 }
-                GuildDataTransaction.insertGuildData(guildId, guildData)
+                GuildDataTransaction.upsertGuildData(guildId, guildData)
             } catch (ignore: EmptyYamlDocumentException) {
             }
         }
