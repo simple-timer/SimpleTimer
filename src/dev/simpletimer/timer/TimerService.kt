@@ -17,13 +17,17 @@ class TimerService(val serviceData: TimerServiceData) {
     // 実行中のJob
     private var coroutineJob: Job? = null
 
-    init {
+    /**
+     * DBから復元したタイマーが動作中だった場合は、コルーチンを再開する
+     * リスナーの登録後に呼び出すこと。
+     *
+     */
+    fun resumeIfRunning() {
         //すでに開始している時は、コルーチンを始める
-        if (serviceData.isStarted && serviceData.isMove) {
+        if (serviceData.isStarted && serviceData.isMove && !serviceData.isFinish) {
             startCoroutine()
         }
     }
-
 
     /**
      * タイマーを開始する

@@ -122,6 +122,9 @@ class Timer(val timerData: TimerData) : TimerService.TimerListener {
             field = value
         }
 
+    //前回のupdateした時の時間を保管
+    private var beforeTime: TimerService.Time = timerService.getTime()
+
     init {
         //初期化処理用のメソッドに任せる
         init()
@@ -158,6 +161,9 @@ class Timer(val timerData: TimerData) : TimerService.TimerListener {
                 }
             }
         }
+
+        //リスナーの登録後に、動作中だったタイマーのコルーチンを再開する
+        timerService.resumeIfRunning()
     }
 
     /**
@@ -335,8 +341,6 @@ class Timer(val timerData: TimerData) : TimerService.TimerListener {
         TimerDataTransaction.updateTimerData(timerData)
     }
 
-    //前回のupdateした時の時間を保管
-    private var beforeTime: TimerService.Time = timerService.getTime()
     override fun onUpdate() {
         //権限の確認
         if (!channel.checkSimpleTimerPermission()) {

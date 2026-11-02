@@ -247,4 +247,28 @@ object TimerDataTransaction {
             TimerDataTable.deleteWhere { timerDataId inList ids }
         }
     }
+
+    /**
+     * [Guild]にある終了済みの[TimerData]を削除する
+     * 破棄処理が行われずに残ってしまったレコードの掃除用
+     *
+     * @param guild [Guild]
+     */
+    fun deleteFinishedTimerData(guild: Guild) {
+        Connector.connect()
+
+        //DELETE
+        transaction {
+            //終了済みのTimerDataのIdを取得
+            val finishedIds = TimerDataTable.selectAll().where {
+                TimerDataTable.guildId.eq(guild.idLong) and TimerDataTable.isFinish.eq(true)
+            }.map { it[TimerDataTable.timerDataId] }
+
+            if (finishedIds.isEmpty()) return@transaction
+
+            //外部キーがあるため、先に紐づいているメッセージのデータを削除
+            TimerMessageTable.deleteWhere { TimerMessageTable.timerDataId inList finishedIds }
+            TimerDataTable.deleteWhere { timerDataId inList finishedIds }
+        }
+    }
 }

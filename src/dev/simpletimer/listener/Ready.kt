@@ -36,18 +36,28 @@ object Ready : ListenerAdapter() {
         Log.sendLog("Shardを起動しました　${++count}/${SimpleTimer.instance.dataContainer.config.shardsCount.value}")
 
         //DB上のタイマー再開などをする
-        event.jda.guilds.map { TimerDataTransaction.getTimerData(it) }.forEach {
-            it.forEach timerData@{ timerData ->
-                // チャンネルを取得できなかったタイマーは飛ばす
-                if (timerData.channel.isFailure) return@timerData
-                try {
-                    // Timerのインスタンスを復元
-                    Timer(timerData)
-                } catch (e: Exception) {
-                    Log.sendLog("タイマーの復元に失敗しました: ${e.stackTraceToString()}", true)
+        event.jda.guilds
+            .map { guild ->
+                // 終了済みのまま残っているタイマーを掃除
+                TimerDataTransaction.deleteFinishedTimerData(guild)
+                // GuildにあるTimerDataを取得
+                TimerDataTransaction.getTimerData(guild)
+            }
+            .forEach {
+                it.filterNot { timerData ->
+                    //終了済みのタイマーは飛ばす
+                    timerData.timerServiceData.isFinish ||
+                            // チャンネルを取得できなかったタイマーは飛ばす
+                            timerData.channel.isFailure
+                }.forEach { timerData ->
+                    try {
+                        // Timerのインスタンスを復元
+                        Timer(timerData)
+                    } catch (e: Exception) {
+                        Log.sendLog("タイマーの復元に失敗しました: ${e.stackTraceToString()}", true)
+                    }
                 }
             }
-        }
 
         //キューのDBを掃除します。
         TimerQueueTransaction.cleanup()
