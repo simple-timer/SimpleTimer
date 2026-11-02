@@ -66,10 +66,10 @@ class Timer(val timerData: TimerData) : TimerService.TimerListener {
     private var forceUpdateDisplay = false
 
     //Displayの表示のベース
-    private var base: String? = null
+    private var base: String? = timerData.displayMessageBase
         set(value) {
             //DBを更新
-            timerData.displayMessageBase = base
+            timerData.displayMessageBase = value
             TimerDataTransaction.updateTimerData(timerData)
 
             field = value
