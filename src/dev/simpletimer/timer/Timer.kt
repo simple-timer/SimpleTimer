@@ -481,7 +481,7 @@ class Timer(val timerData: TimerData) : TimerService.TimerListener {
         }
 
         //返信をまずは試みる
-        displayMessage?.reply("${timerData.number.format(message)}${mention}")?.apply {
+        displayMessage?.reply(messageContext)?.apply {
             //削除のボタンを設置
             if (putDeleteButton) setComponents(ActionRow.of(DeleteMessageButton.createButton(0, guild.getLang())))
         }
@@ -490,8 +490,7 @@ class Timer(val timerData: TimerData) : TimerService.TimerListener {
                 noticeMessage = it
             }
         //返信でできなかったときは通常どおりのメッセージを送信
-            ?: {
-                channel.sendMessage(messageContext).apply {
+            ?: channel.sendMessage(messageContext).apply {
                     //削除のボタンを設置
                     if (putDeleteButton) setComponents(
                         ActionRow.of(
@@ -504,7 +503,6 @@ class Timer(val timerData: TimerData) : TimerService.TimerListener {
                 }.queue {
                     noticeMessage = it
                 }
-            }
     }
 
     /**
