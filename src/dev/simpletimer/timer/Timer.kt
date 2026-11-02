@@ -1,10 +1,6 @@
 package dev.simpletimer.timer
 
-import dev.simpletimer.component.button.AddTimerButton
-import dev.simpletimer.component.button.DeleteMessageButton
-import dev.simpletimer.component.button.FinishButton
-import dev.simpletimer.component.button.RestartButton
-import dev.simpletimer.component.button.StopButton
+import dev.simpletimer.component.button.*
 import dev.simpletimer.data.enum.Mention
 import dev.simpletimer.data.enum.NoticeTiming
 import dev.simpletimer.database.data.TimerData
@@ -526,18 +522,18 @@ class Timer(val timerData: TimerData) : TimerService.TimerListener {
             }
         //返信でできなかったときは通常どおりのメッセージを送信
             ?: channel.sendMessage(messageContext).apply {
-                    //削除のボタンを設置
-                    if (putDeleteButton) setComponents(
-                        ActionRow.of(
-                            DeleteMessageButton.createButton(
-                                0,
-                                guild.getLang()
-                            )
+                //削除のボタンを設置
+                if (putDeleteButton) setComponents(
+                    ActionRow.of(
+                        DeleteMessageButton.createButton(
+                            0,
+                            guild.getLang()
                         )
                     )
-                }.queue {
-                    noticeMessage = it
-                }
+                )
+            }.queue {
+                noticeMessage = it
+            }
     }
 
     /**

@@ -1,10 +1,10 @@
 package dev.simpletimer
 
+import club.minnced.discord.jdave.interop.JDaveSessionFactory
 import dev.simpletimer.audio_player.AudioPlayerManager
 import dev.simpletimer.command.SlashCommandManager
 import dev.simpletimer.data.DataContainer
 import dev.simpletimer.listener.ListenerManager
-import club.minnced.discord.jdave.interop.JDaveSessionFactory
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder

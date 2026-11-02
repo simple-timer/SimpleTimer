@@ -30,7 +30,10 @@ class DataContainer {
 
     //コードソースのファイル
     private val codeSourceFile =
-        File(javaClass.protectionDomain.codeSource.location.path.removePrefix("nested:").removePrefix("file:").substringBefore("/!"))
+        File(
+            javaClass.protectionDomain.codeSource.location.path.removePrefix("nested:").removePrefix("file:")
+                .substringBefore("/!")
+        )
 
     //Jarによる実行かを確認
     private val isJarFile = codeSourceFile.isFile
